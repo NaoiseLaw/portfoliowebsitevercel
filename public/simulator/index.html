@@ -1189,38 +1189,75 @@
             document.getElementById('custom-question-input').disabled = true;
             document.getElementById('custom-question-submit').disabled = true;
             
-            // Simulate thinking time
-            await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
-            
-            // Get response
-            const characterKey = currentCharacter.userData.name + ' - ' + currentCharacter.userData.role;
-            const characterData = naoiseResponses[characterKey];
-            
-            let responseText = "That's a great question! I'd love to discuss this further.";
-            
-            if (characterData && characterData.responses[question]) {
-                responseText = characterData.responses[question];
-            } else if (characterData && characterData.responses['default']) {
-                responseText = characterData.responses['default'];
-            }
-            
-            // Update conversation
-            currentCharacter.userData.conversations.push({
-                user: question,
-                response: responseText
-            });
-            
-            // Update display
-            dialogueContent.innerHTML = dialogueContent.innerHTML.replace(
-                '<span class="loading"></span>',
-                responseText
-            );
-            
-            dialogueContent.scrollTop = dialogueContent.scrollHeight;
-            
-            // Random dialogue events
-            if (Math.random() < 0.3) {
-                createFloatingText('💡', currentCharacter.position);
+            try {
+                // Call the AI API
+                const response = await fetch('/simulator/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: question,
+                        sessionId: 'simulator-session'
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API responded with status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const responseText = data.message || "That's a great question! I'd love to discuss this further.";
+                
+                DebugLogger.log(`AI Response received: "${responseText.substring(0, 50)}..."`);
+                
+                // Update conversation
+                currentCharacter.userData.conversations.push({
+                    user: question,
+                    response: responseText
+                });
+                
+                // Update display
+                dialogueContent.innerHTML = dialogueContent.innerHTML.replace(
+                    '<span class="loading"></span>',
+                    responseText
+                );
+                
+                dialogueContent.scrollTop = dialogueContent.scrollHeight;
+                
+                // Random dialogue events
+                if (Math.random() < 0.3) {
+                    createFloatingText('💡', currentCharacter.position);
+                }
+                
+            } catch (error) {
+                DebugLogger.error(`API call failed: ${error.message}`);
+                
+                // Fallback to local responses
+                const characterKey = currentCharacter.userData.name + ' - ' + currentCharacter.userData.role;
+                const characterData = naoiseResponses[characterKey];
+                
+                let responseText = "That's a great question! I'd love to discuss this further.";
+                
+                if (characterData && characterData.responses[question]) {
+                    responseText = characterData.responses[question];
+                } else if (characterData && characterData.responses['default']) {
+                    responseText = characterData.responses['default'];
+                }
+                
+                // Update conversation
+                currentCharacter.userData.conversations.push({
+                    user: question,
+                    response: responseText
+                });
+                
+                // Update display
+                dialogueContent.innerHTML = dialogueContent.innerHTML.replace(
+                    '<span class="loading"></span>',
+                    responseText
+                );
+                
+                dialogueContent.scrollTop = dialogueContent.scrollHeight;
             }
             
             // Re-enable UI
