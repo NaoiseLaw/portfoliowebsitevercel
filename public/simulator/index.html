@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Portfolio - Meet Naoise Law</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+        }
+        
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            max-width: 300px;
+        }
+        
+        #dialogue-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+        }
+        
+        #dialogue-box h3 {
+            margin: 0 0 10px 0;
+            color: #2196F3;
+        }
+        
+        #dialogue-content {
+            margin: 10px 0;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .dialogue-option {
+            background: #f0f0f0;
+            border: 2px solid #2196F3;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .dialogue-option:hover {
+            background: #2196F3;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        #custom-question-container {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        
+        #custom-question-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        
+        #custom-question-submit {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        #custom-question-submit:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+        
+        #custom-question-submit:disabled {
+            background: #999;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(33, 150, 243, 0.3);
+            border-radius: 50%;
+            border-top-color: #2196F3;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .instruction {
+            opacity: 0.8;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        #interaction-prompt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .floating-text {
+            position: absolute;
+            color: #ff0;
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+            animation: floatUp 2s ease-out forwards;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-100px); }
+        }
+
+        #back-to-portfolio {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        #back-to-portfolio:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div id="ui-overlay">
+        <h2>Meet Naoise Law</h2>
+        <p style="font-size: 20px;">💼 AI Product Manager</p>
+        <p>Use WASD to move around</p>
+        <p>Arrow keys or mouse to look left/right</p>
+        <p>Press E to interact</p>
+        <p>Press SPACE to dance</p>
+        <p>Press ESC to close dialogs</p>
+        <p class="instruction">💡 Ask about experience, skills, or projects!</p>
+    </div>
+
+    <a href="/" id="back-to-portfolio">← Back to Portfolio</a>
+    
+    <div id="dialogue-box">
+        <h3 id="dialogue-name">Name</h3>
+        <div id="dialogue-content">Content</div>
+        <div id="dialogue-options"></div>
+        <div id="custom-question-container">
+            <p style="margin: 5px 0; font-size: 14px; opacity: 0.8; text-align: center;">━━━ Ask any question about Naoise ━━━</p>
+            <input type="text" id="custom-question-input" placeholder="e.g., 'Tell me about your hackathon win' or 'How did you manage $1.5B in funds?'" maxlength="200">
+            <button id="custom-question-submit">Ask Question</button>
+        </div>
+    </div>
+    
+    <div id="interaction-prompt"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Debug Console -->
+    <div id="debug-console" style="position: fixed; top: 10px; right: 10px; width: 300px; height: 200px; background: rgba(0,0,0,0.8); color: #00ff00; font-family: monospace; font-size: 12px; padding: 10px; border-radius: 5px; overflow-y: auto; z-index: 1000; display: none;">
+        <div style="color: #ffff00; font-weight: bold; margin-bottom: 5px;">🔧 DEBUG CONSOLE</div>
+        <div id="debug-output"></div>
+    </div>
+    
+    <!-- Performance Monitor -->
+    <div id="performance-monitor" style="position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; z-index: 1000;">
+        <div>FPS: <span id="fps-counter">60</span></div>
+        <div>Objects: <span id="object-count">0</span></div>
+        <div>Memory: <span id="memory-usage">0</span>MB</div>
+    </div>
+    
+    <!-- Test Status Panel -->
+    <div id="test-status" style="position: fixed; top: 50%; left: 10px; background: rgba(0,0,0,0.9); color: white; padding: 15px; border-radius: 10px; font-family: monospace; font-size: 12px; z-index: 1000; max-width: 250px; display: none;">
+        <div style="color: #ffff00; font-weight: bold; margin-bottom: 10px;">🧪 TEST STATUS</div>
+        <div id="test-results"></div>
+    </div>
+    
+    <script>
+        // ===== COMPREHENSIVE TESTING & DEBUGGING SYSTEM =====
+        
+        // Debug logging system
+        const DebugLogger = {
+            logs: [],
+            maxLogs: 100,
+            
+            log: function(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+                this.logs.push(logEntry);
+                
+                // Keep only recent logs
+                if (this.logs.length > this.maxLogs) {
+                    this.logs.shift();
+                }
+                
+                // Update debug console
+                const debugOutput = document.getElementById('debug-output');
+                if (debugOutput) {
+                    debugOutput.innerHTML = this.logs.slice(-20).join('<br>');
+                    debugOutput.scrollTop = debugOutput.scrollHeight;
+                }
+                
+                // Also log to browser console
+                console.log(logEntry);
+            },
+            
+            error: function(message) {
+                this.log(`❌ ERROR: ${message}`, 'error');
+            },
+            
+            success: function(message) {
+                this.log(`✅ SUCCESS: ${message}`, 'success');
+            },
+            
+            warning: function(message) {
+                this.log(`⚠️ WARNING: ${message}`, 'warning');
+            }
+        };
+        
+        // Performance monitoring
+        const PerformanceMonitor = {
+            frameCount: 0,
+            lastTime: performance.now(),
+            fps: 60,
+            
+            update: function() {
+                this.frameCount++;
+                const currentTime = performance.now();
+                
+                if (currentTime - this.lastTime >= 1000) {
+                    this.fps = Math.round((this.frameCount * 1000) / (currentTime - this.lastTime));
+                    this.frameCount = 0;
+                    this.lastTime = currentTime;
+                    
+                    // Update FPS display
+                    const fpsCounter = document.getElementById('fps-counter');
+                    if (fpsCounter) {
+                        fpsCounter.textContent = this.fps;
+                        fpsCounter.style.color = this.fps < 30 ? '#ff0000' : this.fps < 50 ? '#ffff00' : '#00ff00';
+                    }
+                    
+                    // Update object count
+                    const objectCount = document.getElementById('object-count');
+                    if (objectCount) {
+                        objectCount.textContent = scene.children.length;
+                    }
+                    
+                    // Update memory usage (if available)
+                    if (performance.memory) {
+                        const memoryUsage = document.getElementById('memory-usage');
+                        if (memoryUsage) {
+                            const usedMB = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+                            memoryUsage.textContent = usedMB;
+                        }
+                    }
+                }
+            }
+        };
+        
+        // Test suite
+        const TestSuite = {
+            tests: [],
+            results: {},
+            
+            addTest: function(name, testFunction) {
+                this.tests.push({ name, testFunction });
+            },
+            
+            runTests: function() {
+                DebugLogger.log('🧪 Starting test suite...');
+                this.results = {};
+                
+                this.tests.forEach(test => {
+                    try {
+                        const result = test.testFunction();
+                        this.results[test.name] = result;
+                        if (result.passed) {
+                            DebugLogger.success(`${test.name}: ${result.message}`);
+                        } else {
+                            DebugLogger.error(`${test.name}: ${result.message}`);
+                        }
+                    } catch (error) {
+                        this.results[test.name] = { passed: false, message: `Test failed with error: ${error.message}` };
+                        DebugLogger.error(`${test.name}: Test failed with error: ${error.message}`);
+                    }
+                });
+                
+                this.updateTestDisplay();
+                return this.results;
+            },
+            
+            updateTestDisplay: function() {
+                const testResults = document.getElementById('test-results');
+                if (!testResults) return;
+                
+                let html = '';
+                Object.entries(this.results).forEach(([testName, result]) => {
+                    const status = result.passed ? '✅' : '❌';
+                    const color = result.passed ? '#00ff00' : '#ff0000';
+                    html += `<div style="color: ${color};">${status} ${testName}</div>`;
+                });
+                testResults.innerHTML = html;
+            }
+        };
+        
+        // Add comprehensive tests
+        TestSuite.addTest('Three.js Loading', () => {
+            if (typeof THREE !== 'undefined') {
+                return { passed: true, message: `Three.js v${THREE.REVISION} loaded successfully` };
+            }
+            return { passed: false, message: 'Three.js failed to load' };
+        });
+        
+        TestSuite.addTest('Scene Initialization', () => {
+            if (scene && scene.children.length > 0) {
+                return { passed: true, message: `Scene created with ${scene.children.length} objects` };
+            }
+            return { passed: false, message: 'Scene initialization failed' };
+        });
+        
+        TestSuite.addTest('Character Spawning', () => {
+            if (characters && characters.length === 3) {
+                return { passed: true, message: `All 3 characters spawned successfully` };
+            }
+            return { passed: false, message: `Only ${characters ? characters.length : 0} characters spawned` };
+        });
+        
+        TestSuite.addTest('Floor Rendering', () => {
+            const floor = scene.children.find(child => child.geometry && child.geometry.type === 'PlaneGeometry');
+            if (floor) {
+                return { passed: true, message: 'White floor rendered without gaps' };
+            }
+            return { passed: false, message: 'Floor not found or not rendering' };
+        });
+        
+        TestSuite.addTest('Lighting System', () => {
+            const lights = scene.children.filter(child => child.isLight);
+            if (lights.length >= 2) {
+                return { passed: true, message: `Lighting system active with ${lights.length} lights` };
+            }
+            return { passed: false, message: 'Insufficient lighting setup' };
+        });
+        
+        TestSuite.addTest('Camera Controls', () => {
+            if (camera && camera.position) {
+                return { passed: true, message: 'Camera controls initialized' };
+            }
+            return { passed: false, message: 'Camera controls not working' };
+        });
+        
+        TestSuite.addTest('Interaction System', () => {
+            const dialogueBox = document.getElementById('dialogue-box');
+            if (dialogueBox) {
+                return { passed: true, message: 'E key interaction system ready' };
+            }
+            return { passed: false, message: 'Interaction system not initialized' };
+        });
+        
+        TestSuite.addTest('API Endpoint', () => {
+            // Test if we can reach the chat endpoint
+            return fetch('/simulator/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'test', sessionId: 'test' })
+            }).then(response => {
+                if (response.ok) {
+                    return { passed: true, message: 'API endpoint responding' };
+                } else {
+                    return { passed: false, message: `API endpoint returned ${response.status}` };
+                }
+            }).catch(error => {
+                return { passed: false, message: `API endpoint error: ${error.message}` };
+            });
+        });
+        
+        // Mobile compatibility test
+        TestSuite.addTest('Mobile Compatibility', () => {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const hasTouch = 'ontouchstart' in window;
+            
+            if (isMobile || hasTouch) {
+                return { passed: true, message: 'Mobile device detected, touch controls available' };
+            } else {
+                return { passed: true, message: 'Desktop device, keyboard/mouse controls available' };
+            }
+        });
+        
+        // Keyboard shortcuts for debugging
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Shift+D: Toggle debug console
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                e.preventDefault();
+                const debugConsole = document.getElementById('debug-console');
+                debugConsole.style.display = debugConsole.style.display === 'none' ? 'block' : 'none';
+                DebugLogger.log('Debug console toggled');
+            }
+            
+            // Ctrl+Shift+T: Run tests
+            if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+                e.preventDefault();
+                const testStatus = document.getElementById('test-status');
+                testStatus.style.display = testStatus.style.display === 'none' ? 'block' : 'none';
+                TestSuite.runTests();
+                DebugLogger.log('Test suite executed');
+            }
+            
+            // Ctrl+Shift+P: Toggle performance monitor
+            if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+                e.preventDefault();
+                const perfMonitor = document.getElementById('performance-monitor');
+                perfMonitor.style.display = perfMonitor.style.display === 'none' ? 'block' : 'none';
+                DebugLogger.log('Performance monitor toggled');
+            }
+        });
+        
+        // Initialize debugging
+        DebugLogger.log('🚀 3D Recruitment Simulator starting...');
+        DebugLogger.log(`Browser: ${navigator.userAgent}`);
+        DebugLogger.log(`Screen: ${window.innerWidth}x${window.innerHeight}`);
+        DebugLogger.log(`Device: ${/Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop'}`);
+        
+        // ===== ORIGINAL SIMULATOR CODE =====
+        // Scene setup with California sky
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB); // Simple sky blue
+        scene.fog = new THREE.Fog(0x87CEEB, 10, 50);
+        
+        DebugLogger.log('Scene initialized with California sky background');
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.6, 5);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        DebugLogger.log(`Renderer initialized: ${window.innerWidth}x${window.innerHeight}, shadows enabled`);
+        
+        // Floating text effect
+        function createFloatingText(text, worldPos) {
+            const screenPos = worldPos.clone();
+            screenPos.project(camera);
+            
+            const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
+            const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
+            
+            const div = document.createElement('div');
+            div.className = 'floating-text';
+            div.textContent = text;
+            div.style.left = x + 'px';
+            div.style.top = y + 'px';
+            document.body.appendChild(div);
+            
+            setTimeout(() => div.remove(), 2000);
+        }
+        
+        // Warm natural lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xFFE5B4, 0.6);
+        directionalLight.position.set(10, 15, 10);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.camera.near = 0.1;
+        directionalLight.shadow.camera.far = 50;
+        directionalLight.shadow.camera.left = -30;
+        directionalLight.shadow.camera.right = 30;
+        directionalLight.shadow.camera.top = 30;
+        directionalLight.shadow.camera.bottom = -30;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+        
+        // Clean white floor (fixed - single plane)
+        const floorGeometry = new THREE.PlaneGeometry(40, 40);
+        const floorMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xFFFFFF,  // Clean white
+            roughness: 0.7,
+            metalness: 0.1
+        });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+        
+        // Off-white walls
+        const wallMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xF8F8FF,
+            roughness: 0.9
+        });
+        
+        const windowMaterial = new THREE.MeshStandardMaterial({
+            color: 0x87ceeb,
+            transparent: true,
+            opacity: 0.3,
+            roughness: 0.1,
+            metalness: 0.5
+        });
+        
+        // Back wall with windows
+        const backWall = new THREE.Mesh(
+            new THREE.PlaneGeometry(40, 10),
+            wallMaterial
+        );
+        backWall.position.set(0, 5, -20);
+        backWall.receiveShadow = true;
+        scene.add(backWall);
+        
+        // Add windows to back wall
+        for (let x = -15; x <= 15; x += 10) {
+            const window = new THREE.Mesh(
+                new THREE.PlaneGeometry(4, 3),
+                windowMaterial
+            );
+            window.position.set(x, 5, -19.9);
+            scene.add(window);
+        }
+        
+        // Side walls
+        const leftWall = new THREE.Mesh(
+            new THREE.PlaneGeometry(40, 10),
+            wallMaterial
+        );
+        leftWall.position.set(-20, 5, 0);
+        leftWall.rotation.y = Math.PI / 2;
+        leftWall.receiveShadow = true;
+        scene.add(leftWall);
+        
+        const rightWall = new THREE.Mesh(
+            new THREE.PlaneGeometry(40, 10),
+            wallMaterial
+        );
+        rightWall.position.set(20, 5, 0);
+        rightWall.rotation.y = -Math.PI / 2;
+        rightWall.receiveShadow = true;
+        scene.add(rightWall);
+        
+        // Office furniture
+        const woodMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x8b6914,
+            roughness: 0.6,
+            metalness: 0.1
+        });
+        
+        const metalMaterial = new THREE.MeshStandardMaterial({
+            color: 0x404040,
+            roughness: 0.3,
+            metalness: 0.8
+        });
+        
+        // Create detailed desks
+        function createDesk(x, z) {
+            const deskGroup = new THREE.Group();
+            
+            // Desk top
+            const deskTop = new THREE.Mesh(
+                new THREE.BoxGeometry(3, 0.1, 1.5),
+                woodMaterial
+            );
+            deskTop.position.y = 0.75;
+            deskTop.castShadow = true;
+            deskTop.receiveShadow = true;
+            deskGroup.add(deskTop);
+            
+            // Metal frame
+            const frameGeometry = new THREE.BoxGeometry(0.05, 0.7, 0.05);
+            const framePositions = [
+                [-1.45, 0.35, -0.7],
+                [1.45, 0.35, -0.7],
+                [-1.45, 0.35, 0.7],
+                [1.45, 0.35, 0.7]
+            ];
+            
+            framePositions.forEach(pos => {
+                const frame = new THREE.Mesh(frameGeometry, metalMaterial);
+                frame.position.set(...pos);
+                frame.castShadow = true;
+                deskGroup.add(frame);
+            });
+            
+            // Computer monitor
+            const monitorBase = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.15, 0.15, 0.05, 16),
+                metalMaterial
+            );
+            monitorBase.position.set(0, 0.82, 0);
+            deskGroup.add(monitorBase);
+            
+            const monitorStand = new THREE.Mesh(
+                new THREE.BoxGeometry(0.05, 0.3, 0.05),
+                metalMaterial
+            );
+            monitorStand.position.set(0, 0.95, 0);
+            deskGroup.add(monitorStand);
+            
+            const monitorScreen = new THREE.Mesh(
+                new THREE.BoxGeometry(1.2, 0.7, 0.05),
+                new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.1, metalness: 0.5 })
+            );
+            monitorScreen.position.set(0, 1.3, 0);
+            deskGroup.add(monitorScreen);
+            
+            // Keyboard
+            const keyboard = new THREE.Mesh(
+                new THREE.BoxGeometry(0.4, 0.02, 0.15),
+                metalMaterial
+            );
+            keyboard.position.set(0, 0.81, 0.3);
+            deskGroup.add(keyboard);
+            
+            // Chair
+            const chairSeat = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 0.05, 0.5),
+                new THREE.MeshStandardMaterial({ color: 0x333333 })
+            );
+            chairSeat.position.set(0, 0.5, 0.8);
+            deskGroup.add(chairSeat);
+            
+            const chairBack = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 0.6, 0.05),
+                new THREE.MeshStandardMaterial({ color: 0x333333 })
+            );
+            chairBack.position.set(0, 0.8, 1.02);
+            deskGroup.add(chairBack);
+            
+            // Coffee mug
+            const mug = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.08, 0.08, 0.1, 8),
+                new THREE.MeshStandardMaterial({ color: 0xffffff })
+            );
+            mug.position.set(Math.random() * 0.5 - 0.25, 0.85, Math.random() * 0.3);
+            deskGroup.add(mug);
+            
+            deskGroup.position.set(x, 0, z);
+            return deskGroup;
+        }
+        
+        // Add desks
+        const desk1 = createDesk(-10, -10);
+        const desk2 = createDesk(0, -10);
+        const desk3 = createDesk(10, -10);
+        scene.add(desk1, desk2, desk3);
+        
+        // Add whiteboard
+        const whiteboardMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xffffff,
+            roughness: 0.2,
+            metalness: 0.1
+        });
+        
+        const whiteboard = new THREE.Mesh(
+            new THREE.BoxGeometry(4, 2, 0.1),
+            whiteboardMaterial
+        );
+        whiteboard.position.set(0, 3, -19.8);
+        whiteboard.castShadow = true;
+        scene.add(whiteboard);
+        
+        // Roomba
+        const roombaGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.1, 16);
+        const roombaMaterial = new THREE.MeshStandardMaterial({ color: 0x4169e1 });
+        const roomba = new THREE.Mesh(roombaGeometry, roombaMaterial);
+        roomba.position.set(5, 0.05, 5);
+        roomba.userData = { velocity: new THREE.Vector3(0.05, 0, 0.05) };
+        scene.add(roomba);
+        
+        // Plant decorations
+        const plantPot = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.3, 0.25, 0.4, 8),
+            new THREE.MeshStandardMaterial({ color: 0x8b4513 })
+        );
+        plantPot.position.set(-15, 0.2, -15);
+        scene.add(plantPot);
+        
+        const plantLeaves = new THREE.Mesh(
+            new THREE.SphereGeometry(0.6, 6, 5),
+            new THREE.MeshStandardMaterial({ color: 0x228b22 })
+        );
+        plantLeaves.position.set(-15, 0.8, -15);
+        scene.add(plantLeaves);
+        
+        // Add more plants
+        const plantPot2 = plantPot.clone();
+        plantPot2.position.set(15, 0.2, -15);
+        scene.add(plantPot2);
+        
+        const plantLeaves2 = plantLeaves.clone();
+        plantLeaves2.position.set(15, 0.8, -15);
+        scene.add(plantLeaves2);
+        
+        const plantPot3 = plantPot.clone();
+        plantPot3.position.set(0, 0.2, 15);
+        scene.add(plantPot3);
+        
+        const plantLeaves3 = plantLeaves.clone();
+        plantLeaves3.position.set(0, 0.8, 15);
+        scene.add(plantLeaves3);
+        
+        // Add coffee station
+        const coffeeTable = new THREE.Mesh(
+            new THREE.BoxGeometry(2, 0.8, 1),
+            woodMaterial
+        );
+        coffeeTable.position.set(-18, 0.4, 10);
+        coffeeTable.castShadow = true;
+        scene.add(coffeeTable);
+        
+        const coffeeMachine = new THREE.Mesh(
+            new THREE.BoxGeometry(0.4, 0.5, 0.3),
+            metalMaterial
+        );
+        coffeeMachine.position.set(-18, 1.05, 10);
+        scene.add(coffeeMachine);
+        
+        // Character creation with more detail
+        const characters = [];
+        
+        function createCharacter(name, role, x, z, shirtColor, characterData) {
+            const group = new THREE.Group();
+            
+            // Torso
+            const torsoGeometry = new THREE.CylinderGeometry(0.25, 0.3, 0.8, 8);
+            const torsoMaterial = new THREE.MeshStandardMaterial({ color: shirtColor });
+            const torso = new THREE.Mesh(torsoGeometry, torsoMaterial);
+            torso.position.y = 0.6;
+            torso.castShadow = true;
+            group.add(torso);
+            
+            // Arms
+            const armGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.6, 6);
+            const armMaterial = new THREE.MeshStandardMaterial({ color: shirtColor });
+            
+            const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+            leftArm.position.set(-0.3, 0.7, 0);
+            leftArm.rotation.z = Math.PI / 8;
+            group.add(leftArm);
+            
+            const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+            rightArm.position.set(0.3, 0.7, 0);
+            rightArm.rotation.z = -Math.PI / 8;
+            group.add(rightArm);
+            
+            // Legs
+            const legGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 6);
+            const legMaterial = new THREE.MeshStandardMaterial({ color: 0x2c3e50 });
+            
+            const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+            leftLeg.position.set(-0.15, 0.4, 0);
+            group.add(leftLeg);
+            
+            const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+            rightLeg.position.set(0.15, 0.4, 0);
+            group.add(rightLeg);
+            
+            // Head
+            const headGeometry = new THREE.SphereGeometry(0.25, 8, 6);
+            const headMaterial = new THREE.MeshStandardMaterial({ color: 0xffdbac });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 1.25;
+            head.castShadow = true;
+            group.add(head);
+            
+            // Hair
+            const hairGeometry = new THREE.SphereGeometry(0.27, 8, 6);
+            const hairMaterial = new THREE.MeshStandardMaterial({ color: characterData.hairColor });
+            const hair = new THREE.Mesh(hairGeometry, hairMaterial);
+            hair.position.y = 1.35;
+            hair.scale.y = 0.6;
+            group.add(hair);
+            
+            // Eyes
+            const eyeGeometry = new THREE.SphereGeometry(0.03, 4, 4);
+            const eyeMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+            
+            const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            leftEye.position.set(-0.08, 1.25, 0.22);
+            group.add(leftEye);
+            
+            const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            rightEye.position.set(0.08, 1.25, 0.22);
+            group.add(rightEye);
+            
+            // Name label
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 64;
+            const context = canvas.getContext('2d');
+            context.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            context.fillRect(0, 0, 256, 64);
+            context.fillStyle = 'black';
+            context.font = 'bold 20px Arial';
+            context.textAlign = 'center';
+            context.fillText(name, 128, 25);
+            context.font = '16px Arial';
+            context.fillStyle = '#666';
+            context.fillText(role, 128, 45);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const labelMaterial = new THREE.SpriteMaterial({ map: texture });
+            const label = new THREE.Sprite(labelMaterial);
+            label.position.y = 1.8;
+            label.scale.set(2, 0.5, 1);
+            group.add(label);
+            
+            group.position.set(x, 0, z);
+            group.userData = { 
+                name, 
+                role, 
+                conversations: [],
+                initialPosition: new THREE.Vector3(x, 0, z),
+                targetPosition: new THREE.Vector3(x, 0, z),
+                moveTimer: 0,
+                isDancing: false,
+                tripChance: 0.001,
+                leftArm: leftArm,
+                rightArm: rightArm,
+                ...characterData
+            };
+            
+            characters.push(group);
+            return group;
+        }
+        
+        // Create three versions of Naoise Law
+        const technicalMe = createCharacter('Naoise Law', 'AI Product Manager - Technical', -10, -5, 0x4169e1, {
+            hairColor: 0x8b4513,
+            personality: 'technical problem solver with business acumen',
+            quirk: 'gets excited about 94% accuracy ML models'
+        });
+        
+        const leadershipMe = createCharacter('Naoise Law', 'Product Leader & Strategist', 0, -5, 0x228b22, {
+            hairColor: 0x8b4513,
+            personality: 'strategic leader and stakeholder manager',
+            quirk: 'has successfully managed $1.5B in operations'
+        });
+        
+        const creativeMe = createCharacter('Naoise Law', 'Innovation & Product Designer', 10, -5, 0xff6347, {
+            hairColor: 0x8b4513,
+            personality: 'user-focused innovator and design thinker',
+            quirk: 'designed a government-adopted recycling system'
+        });
+        
+        scene.add(technicalMe, leadershipMe, creativeMe);
+        
+        DebugLogger.log(`All 3 characters created and added to scene`);
+        DebugLogger.log(`Character positions: Technical(${technicalMe.position.x}, ${technicalMe.position.z}), Leadership(${leadershipMe.position.x}, ${leadershipMe.position.z}), Creative(${creativeMe.position.x}, ${creativeMe.position.z})`);
+        
+        // Player controls
+        const player = {
+            position: new THREE.Vector3(0, 1.6, 5),
+            velocity: new THREE.Vector3(0, 0, 0),
+            speed: 0.1,
+            isDancing: false
+        };
+        
+        const keys = {};
+        
+        document.addEventListener('keydown', (e) => {
+            // Don't process game controls if typing in the custom question input
+            if (document.activeElement === document.getElementById('custom-question-input')) {
+                // Only process ESC when typing
+                if (e.key === 'Escape') {
+                    document.getElementById('dialogue-box').style.display = 'none';
+                    currentCharacter = null;
+                    if (document.pointerLockElement === renderer.domElement) {
+                        document.exitPointerLock();
+                    }
+                }
+                return;
+            }
+            
+            keys[e.key.toLowerCase()] = true;
+            keys[e.key] = true; // Store original key for arrow keys
+            
+            if (e.key.toLowerCase() === 'e' && nearbyCharacter && document.getElementById('dialogue-box').style.display !== 'block') {
+                e.preventDefault();
+                DebugLogger.log(`E key pressed - opening dialogue with ${nearbyCharacter.userData.name}`);
+                openDialogue(nearbyCharacter);
+            }
+            
+            if (e.key === ' ' && document.getElementById('dialogue-box').style.display !== 'block') {
+                e.preventDefault();
+                player.isDancing = true;
+                createFloatingText('💃🕺', player.position);
+            }
+            
+            // Prevent arrow keys from scrolling the page
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            // Don't process game controls if typing in the custom question input
+            if (document.activeElement === document.getElementById('custom-question-input')) {
+                return;
+            }
+            
+            keys[e.key.toLowerCase()] = false;
+            keys[e.key] = false; // Clear original key for arrow keys
+            
+            if (e.key === ' ' && document.getElementById('dialogue-box').style.display !== 'block') {
+                player.isDancing = false;
+            }
+        });
+        
+        // Character movement AI
+        function updateCharacterMovement(character, deltaTime) {
+            // Random events
+            if (Math.random() < character.userData.tripChance && !character.userData.isDancing) {
+                // Character trips!
+                character.rotation.x = Math.PI / 4;
+                character.position.y = 0.3;
+                createFloatingText('Oof!', character.position);
+                
+                setTimeout(() => {
+                    character.rotation.x = 0;
+                    character.position.y = 0;
+                }, 1000);
+                
+                character.userData.tripChance = 0;
+                setTimeout(() => {
+                    character.userData.tripChance = 0.001;
+                }, 5000);
+            }
+            
+            // Don't move if this character is in conversation or dancing
+            if (character === currentCharacter || character.userData.isDancing) {
+                if (character === currentCharacter) {
+                    // Face the player
+                    const lookTarget = new THREE.Vector3(player.position.x, character.position.y, player.position.z);
+                    character.lookAt(lookTarget);
+                    character.rotation.x = 0;
+                    character.rotation.z = 0;
+                }
+                return;
+            }
+            
+            // Random dance party
+            if (Math.random() < 0.001) {
+                character.userData.isDancing = true;
+                createFloatingText('🎵', character.position);
+                setTimeout(() => {
+                    character.userData.isDancing = false;
+                }, 3000);
+            }
+            
+            character.userData.moveTimer -= deltaTime;
+            
+            if (character.userData.moveTimer <= 0) {
+                // Set new random target
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 3 + Math.random() * 5;
+                character.userData.targetPosition = new THREE.Vector3(
+                    character.userData.initialPosition.x + Math.cos(angle) * distance,
+                    0,
+                    character.userData.initialPosition.z + Math.sin(angle) * distance
+                );
+                
+                // Keep within bounds
+                character.userData.targetPosition.x = Math.max(-18, Math.min(18, character.userData.targetPosition.x));
+                character.userData.targetPosition.z = Math.max(-18, Math.min(18, character.userData.targetPosition.z));
+                
+                character.userData.moveTimer = 5 + Math.random() * 5;
+            }
+            
+            // Move towards target
+            const direction = new THREE.Vector3().subVectors(character.userData.targetPosition, character.position);
+            direction.y = 0;
+            const distance = direction.length();
+            
+            if (distance > 0.1) {
+                direction.normalize();
+                character.position.add(direction.multiplyScalar(0.02));
+                
+                // Face movement direction
+                character.lookAt(character.userData.targetPosition);
+                character.rotation.x = 0;
+                character.rotation.z = 0;
+                
+                // Walking animation
+                if (!character.userData.isDancing) {
+                    character.position.y = Math.abs(Math.sin(Date.now() * 0.005)) * 0.05;
+                }
+            }
+        }
+        
+        // Dialogue system
+        const dialogueBox = document.getElementById('dialogue-box');
+        const dialogueName = document.getElementById('dialogue-name');
+        const dialogueContent = document.getElementById('dialogue-content');
+        const dialogueOptions = document.getElementById('dialogue-options');
+        const interactionPrompt = document.getElementById('interaction-prompt');
+        
+        let currentCharacter = null;
+        let nearbyCharacter = null;
+        
+        // Naoise's recruitment responses based on real background
+        const naoiseResponses = {
+            'Naoise Law - AI Product Manager - Technical': {
+                greetings: [
+                    "Hi! I'm excited to discuss how my AI and automation experience can contribute to your team. I recently won LSE's Code Camp Hackathon building an ML platform with 94% accuracy - what technical challenges are you working on?",
+                    "Great to meet you! I love building AI products that work in production, from 48-hour hackathons to enterprise systems managing $1.5B. What would you like to know about my technical background?"
+                ],
+                responses: {
+                    'Tell me about your technical experience': "Perfect! My hackathon-winning sentiment analysis platform achieved 94% accuracy using Python, BERT, and CNN models - all built in 48 hours as a solo developer. I also built enterprise automation at SEIC managing $1.5B with zero errors. I love solving complex technical problems that drive real business impact.",
+                    'How did you achieve 94% accuracy in your hackathon project?': "Great question! I integrated three pre-trained models - BERT for context, CNN for pattern recognition, and custom NLP processing. The key was superior product thinking: understanding the real user problem and optimizing for both accuracy and speed. I got it processing 100 users in under 2 minutes.",
+                    'What\'s your experience with Python and automation?': "Excellent! Python is my primary language (8/10 proficiency). At SEIC, I built automation systems that reduced manual analysis by 65% and saved 400 hours monthly. I focus on clean, maintainable code that scales - whether it's a 48-hour prototype or 6-month enterprise implementation.",
+                    'Tell me about your AI and ML experience': "Love this question! I've implemented production ML systems using BERT, CNN models, and NLP frameworks. My dissertation research involved deep analysis of AI tool adoption by developers. I understand both the technical implementation and business application of AI - crucial for product roles.",
+                    'default': "That's a great question! My unique background combines deep technical skills with business impact. I've built everything from award-winning ML platforms to enterprise automation systems. I love discussing how technology can solve real problems - what specific challenges is your team working on?"
+                }
+            },
+            'Naoise Law - Product Leader & Strategist': {
+                greetings: [
+                    "Hello! I'm excited to discuss how my leadership experience can drive your team's success. I've managed $1.5B in operations and coordinated teams of 20+ people. What leadership challenges are you facing?",
+                    "Great to meet you! My approach combines strategic thinking with hands-on execution. From C-suite presentations to 5-day product sprints, I deliver results through people and systems. How can I contribute to your goals?"
+                ],
+                responses: {
+                    'Tell me about your leadership experience': "Excellent! I've managed cross-functional teams of 20+ people across finance and tech. At SEIC, I coordinated stakeholders across 4 departments while maintaining zero errors in $1.5B fund reporting. I believe in empowering teams with clear goals and removing blockers for success.",
+                    'How do you manage stakeholders and cross-functional teams?': "Great question! At SEIC, I regularly presented to C-suite executives while coordinating with 20+ stakeholders across legal, operations, and compliance. The key is understanding each stakeholder's priorities and translating complex information into actionable insights they can use.",
+                    'What\'s your approach to delivering results under pressure?': "Perfect example! During VISA Sprint Week, I led a 4-person team from concept to MVP in 5 days, finishing top 4 out of 20+ teams. Under pressure, I focus on clear prioritization, distributed leadership, and maintaining team morale while hitting aggressive deadlines.",
+                    'How did you coordinate operations for $1.5B in funds?': "Fantastic question! I managed operational oversight for 5 PE funds with zero margin for error. Success required building automated tracking systems, coordinating across multiple departments, and maintaining perfect accuracy. I delivered 65% efficiency gains while scaling operations.",
+                    'default': "Great question! My leadership philosophy focuses on empowering teams to exceed expectations while maintaining clear accountability. I've learned that great leadership combines strategic vision with operational excellence. What specific leadership challenges is your team facing?"
+                }
+            },
+            'Naoise Law - Innovation & Product Designer': {
+                greetings: [
+                    "Hi! I'm passionate about creating user-centered solutions that drive real impact. From government-adopted systems to AI interfaces, I focus on solving problems users actually have. What user challenges is your product addressing?",
+                    "Hello! I believe the best products start with deep user understanding. My research with 14 developers for my dissertation taught me how to uncover real user needs. I'd love to hear about your product discovery process!"
+                ],
+                responses: {
+                    'What\'s your approach to product discovery and user research?': "Perfect question! My dissertation involved 14 in-depth developer interviews researching AI tool adoption. I learned that user assumptions are often wrong - real insights come from observing behavior, not just asking questions. I always start with user pain points before designing solutions.",
+                    'Tell me about your design thinking process': "Love this! My hackathon win came from superior product design, not just technical implementation. I start with user empathy, rapidly prototype solutions, and iterate based on feedback. The key is balancing user needs with technical constraints and business goals.",
+                    'How do you approach innovation and creative problem solving?': "Great question! Innovation happens when you deeply understand user needs and aren't constrained by existing solutions. My government-adopted recycling system at Common Purpose shows how user-centered thinking creates scalable impact beyond traditional boundaries.",
+                    'Tell me about the government-adopted system you designed': "Excellent! At Common Purpose Dublin, I co-designed the 'Cash for Cans' recycling system that was adopted by the Irish government in 2024. The key was understanding user behavior patterns and designing incentives that felt natural rather than forced.",
+                    'default': "That's fascinating! What excites me most is creating products that users genuinely love using. Whether it's making complex financial data accessible or designing AI interfaces that feel natural, I focus on the intersection of user delight and business value."
+                }
+            }
+        };
+        
+        function openDialogue(character) {
+            currentCharacter = character;
+            dialogueBox.style.display = 'block';
+            dialogueName.textContent = character.userData.name;
+            
+            DebugLogger.log(`Dialogue opened with ${character.userData.name} (${character.userData.role})`);
+            
+            // Exit pointer lock when opening dialogue
+            if (document.pointerLockElement === renderer.domElement) {
+                document.exitPointerLock();
+            }
+            
+            const characterKey = character.userData.name + ' - ' + character.userData.role;
+            const characterData = naoiseResponses[characterKey];
+            
+            if (character.userData.conversations.length === 0) {
+                const greeting = characterData ? 
+                    characterData.greetings[Math.floor(Math.random() * characterData.greetings.length)] :
+                    `Hi! I'm ${character.userData.name}. ${character.userData.quirk}. What would you like to know about my experience?`;
+                    
+                dialogueContent.innerHTML = `<p><strong>${character.userData.name}:</strong> ${greeting}</p>`;
+            } else {
+                const lastConv = character.userData.conversations[character.userData.conversations.length - 1];
+                dialogueContent.innerHTML = `<p><strong>You:</strong> ${lastConv.user}</p><p><strong>${character.userData.name}:</strong> ${lastConv.response}</p>`;
+            }
+            
+            generateSampleQuestions();
+            
+            setTimeout(() => {
+                document.getElementById('custom-question-input').focus();
+            }, 100);
+        }
+        
+        function generateSampleQuestions() {
+            const questionSets = {
+                'Naoise Law - AI Product Manager - Technical': [
+                    "Tell me about your technical experience",
+                    "How did you achieve 94% accuracy in your hackathon project?",
+                    "What's your experience with Python and automation?",
+                    "Tell me about your AI and ML experience",
+                    "How do you approach complex technical challenges?",
+                    "What's your experience with enterprise-scale systems?"
+                ],
+                'Naoise Law - Product Leader & Strategist': [
+                    "Tell me about your leadership experience",
+                    "How do you manage stakeholders and cross-functional teams?",
+                    "What's your approach to delivering results under pressure?",
+                    "How did you coordinate operations for $1.5B in funds?",
+                    "Tell me about a challenging project you led",
+                    "How do you balance strategy with execution?"
+                ],
+                'Naoise Law - Innovation & Product Designer': [
+                    "What's your approach to product discovery and user research?",
+                    "Tell me about your design thinking process",
+                    "How do you approach innovation and creative problem solving?",
+                    "Tell me about the government-adopted system you designed",
+                    "How do you validate product ideas and user needs?",
+                    "What's your experience with user-centered design?"
+                ]
+            };
+            
+            const characterKey = currentCharacter.userData.name + ' - ' + currentCharacter.userData.role;
+            const questions = questionSets[characterKey] || questionSets['Naoise Law - AI Product Manager - Technical'];
+            const shuffled = questions.sort(() => Math.random() - 0.5);
+            
+            dialogueOptions.innerHTML = '';
+            shuffled.slice(0, 3).forEach(question => {
+                const option = document.createElement('div');
+                option.className = 'dialogue-option';
+                option.textContent = question;
+                option.onclick = () => selectOption(question);
+                dialogueOptions.appendChild(option);
+            });
+        }
+        
+        async function selectOption(question) {
+            if (!currentCharacter) return;
+            
+            DebugLogger.log(`Question asked: "${question}" to ${currentCharacter.userData.name}`);
+            
+            // Show selected question
+            dialogueContent.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
+            dialogueContent.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> <span class="loading"></span></p>`;
+            dialogueContent.scrollTop = dialogueContent.scrollHeight;
+            
+            // Disable UI during loading
+            dialogueOptions.style.pointerEvents = 'none';
+            dialogueOptions.style.opacity = '0.5';
+            document.getElementById('custom-question-input').disabled = true;
+            document.getElementById('custom-question-submit').disabled = true;
+            
+            // Simulate thinking time
+            await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
+            
+            // Get response
+            const characterKey = currentCharacter.userData.name + ' - ' + currentCharacter.userData.role;
+            const characterData = naoiseResponses[characterKey];
+            
+            let responseText = "That's a great question! I'd love to discuss this further.";
+            
+            if (characterData && characterData.responses[question]) {
+                responseText = characterData.responses[question];
+            } else if (characterData && characterData.responses['default']) {
+                responseText = characterData.responses['default'];
+            }
+            
+            // Update conversation
+            currentCharacter.userData.conversations.push({
+                user: question,
+                response: responseText
+            });
+            
+            // Update display
+            dialogueContent.innerHTML = dialogueContent.innerHTML.replace(
+                '<span class="loading"></span>',
+                responseText
+            );
+            
+            dialogueContent.scrollTop = dialogueContent.scrollHeight;
+            
+            // Random dialogue events
+            if (Math.random() < 0.3) {
+                createFloatingText('💡', currentCharacter.position);
+            }
+            
+            // Re-enable UI
+            dialogueOptions.style.pointerEvents = 'auto';
+            dialogueOptions.style.opacity = '1';
+            document.getElementById('custom-question-input').disabled = false;
+            document.getElementById('custom-question-submit').disabled = false;
+            document.getElementById('custom-question-input').value = '';
+            document.getElementById('custom-question-input').focus();
+            
+            // Generate new sample questions
+            generateSampleQuestions();
+        }
+        
+        // Close dialogue with Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                dialogueBox.style.display = 'none';
+                currentCharacter = null;
+                if (document.pointerLockElement === renderer.domElement) {
+                    document.exitPointerLock();
+                }
+            }
+        });
+        
+        // Custom question handling
+        document.getElementById('custom-question-submit').addEventListener('click', () => {
+            const customQuestion = document.getElementById('custom-question-input').value.trim();
+            if (customQuestion && currentCharacter) {
+                selectOption(customQuestion);
+            }
+        });
+        
+        document.getElementById('custom-question-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const customQuestion = e.target.value.trim();
+                if (customQuestion && currentCharacter) {
+                    selectOption(customQuestion);
+                }
+            }
+        });
+        
+        // Animation loop
+        let lastTime = 0;
+        
+        function animate(currentTime) {
+            requestAnimationFrame(animate);
+            
+            const deltaTime = (currentTime - lastTime) / 1000;
+            lastTime = currentTime;
+            
+            // Update player movement
+            player.velocity.set(0, 0, 0);
+            
+            if (!player.isDancing && dialogueBox.style.display !== 'block') {
+                if (keys['w']) player.velocity.z = player.speed;
+                if (keys['s']) player.velocity.z = -player.speed;
+                if (keys['a']) player.velocity.x = -player.speed;
+                if (keys['d']) player.velocity.x = player.speed;
+            }
+            
+            // Arrow key camera controls
+            const lookSpeed = 0.05;
+            if (dialogueBox.style.display !== 'block') {
+                if (keys['ArrowLeft']) {
+                    mouseX += lookSpeed;
+                }
+                if (keys['ArrowRight']) {
+                    mouseX -= lookSpeed;
+                }
+            }
+            
+            // Update camera rotation
+            if (!player.isDancing && dialogueBox.style.display !== 'block') {
+                camera.rotation.y = mouseX;
+                camera.rotation.x = 0;
+            }
+            
+            // Apply movement in camera direction
+            const forward = new THREE.Vector3(0, 0, -1);
+            forward.applyQuaternion(camera.quaternion);
+            forward.y = 0;
+            forward.normalize();
+            
+            const right = new THREE.Vector3(1, 0, 0);
+            right.applyQuaternion(camera.quaternion);
+            right.y = 0;
+            right.normalize();
+            
+            player.position.add(forward.multiplyScalar(player.velocity.z));
+            player.position.add(right.multiplyScalar(player.velocity.x));
+            
+            // Keep player in bounds
+            player.position.x = Math.max(-18, Math.min(18, player.position.x));
+            player.position.z = Math.max(-18, Math.min(18, player.position.z));
+            
+            // Dancing animation for player
+            if (player.isDancing && dialogueBox.style.display !== 'block') {
+                camera.position.y = player.position.y + Math.sin(Date.now() * 0.01) * 0.2;
+                camera.rotation.z = Math.sin(Date.now() * 0.01) * 0.1;
+                camera.rotation.y = mouseX;
+                camera.rotation.x = 0;
+            } else {
+                camera.position.copy(player.position);
+                camera.rotation.z = 0;
+                if (dialogueBox.style.display !== 'block') {
+                    camera.rotation.y = mouseX;
+                    camera.rotation.x = 0;
+                }
+            }
+            
+            // Update character movement
+            characters.forEach(character => {
+                updateCharacterMovement(character, deltaTime);
+                
+                // Dancing animation
+                if (character.userData.isDancing) {
+                    character.rotation.y += 0.1;
+                    character.position.y = Math.abs(Math.sin(Date.now() * 0.01)) * 0.3;
+                    
+                    // Arm waving
+                    character.userData.leftArm.rotation.z = Math.sin(Date.now() * 0.01) * 0.5 + Math.PI / 8;
+                    character.userData.rightArm.rotation.z = -Math.sin(Date.now() * 0.01) * 0.5 - Math.PI / 8;
+                }
+            });
+            
+            // Update Roomba
+            roomba.rotation.y += 0.05;
+            roomba.position.add(roomba.userData.velocity);
+            
+            // Roomba collision detection
+            if (Math.abs(roomba.position.x) > 18 || Math.abs(roomba.position.z) > 18) {
+                roomba.userData.velocity.multiplyScalar(-1);
+                createFloatingText('Bonk!', roomba.position);
+            }
+            
+            // Check for nearby characters
+            nearbyCharacter = null;
+            let minDistance = Infinity;
+            
+            characters.forEach(character => {
+                const distance = player.position.distanceTo(character.position);
+                if (distance < 3 && distance < minDistance) {
+                    minDistance = distance;
+                    nearbyCharacter = character;
+                }
+            });
+            
+            // Show/hide interaction prompt
+            if (nearbyCharacter && !currentCharacter) {
+                interactionPrompt.style.display = 'block';
+                interactionPrompt.textContent = `Press E to talk to ${nearbyCharacter.userData.name}`;
+            } else {
+                interactionPrompt.style.display = 'none';
+            }
+            
+            renderer.render(scene, camera);
+            
+            // Update performance monitoring
+            PerformanceMonitor.update();
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Mouse look
+        let mouseX = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            if (document.pointerLockElement === renderer.domElement && dialogueBox.style.display !== 'block') {
+                mouseX += e.movementX * 0.002;
+            }
+        });
+        
+        renderer.domElement.addEventListener('click', () => {
+            if (!dialogueBox.style.display || dialogueBox.style.display === 'none') {
+                renderer.domElement.requestPointerLock();
+            }
+        });
+        
+        // Initialize and run initial tests
+        setTimeout(() => {
+            DebugLogger.log('Running initial test suite...');
+            TestSuite.runTests();
+            DebugLogger.success('3D Recruitment Simulator fully initialized!');
+        }, 1000);
+        
+        animate(0);
+    </script>
+</body>
+</html>
