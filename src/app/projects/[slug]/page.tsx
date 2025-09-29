@@ -10,7 +10,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const project = (DATA.projects as any[]).find((p) => p.slug === params.slug);
+  const project = (DATA.projects as readonly any[]).find((p) => p.slug === params.slug);
   if (!project) return {};
   return {
     title: project.title,
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const projects = DATA.projects as any[];
+  const projects = DATA.projects as readonly any[];
   const idx = projects.findIndex((p) => p.slug === params.slug);
   if (idx === -1) notFound();
   const project = projects[idx];
