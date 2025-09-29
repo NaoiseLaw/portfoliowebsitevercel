@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { 
   HomeIcon, 
   UserIcon, 
-  Gamepad2Icon, 
+  PlayIcon, 
   FolderIcon, 
   WrenchScrewdriverIcon, 
   EnvelopeIcon,
@@ -29,7 +29,7 @@ const navigation: NavItem[] = [
   { 
     name: "Interactive Experience", 
     href: "http://localhost:3001/simulator", 
-    icon: Gamepad2Icon 
+    icon: PlayIcon 
   },
   {
     name: "Projects",

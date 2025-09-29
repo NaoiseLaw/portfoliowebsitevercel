@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/utils";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 export async function generateStaticParams() {
   const posts = await getBlogPosts();
@@ -66,6 +67,7 @@ export default async function Blog({
 
   return (
     <section id="blog">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Blog", href: "/blog" }, { label: post.metadata.title }]} />
       <script
         type="application/ld+json"
         suppressHydrationWarning

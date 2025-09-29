@@ -65,8 +65,14 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider delayDuration={0}>
+            <a
+              href="#content"
+              className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:top-2 focus:left-2 focus:bg-background focus:text-foreground focus:px-3 focus:py-2 focus:rounded"
+            >
+              Skip to content
+            </a>
             <DropdownNav />
-            <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 pt-24">
+            <main id="content" className="max-w-2xl mx-auto py-12 sm:py-24 px-6 pt-24">
               {children}
             </main>
             <Navbar />
