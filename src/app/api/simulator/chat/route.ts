@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { DATA } from "@/data/resume";
 import { getProjectPosts } from "@/data/projects";
+import { appendChat, incrementFaq, recentChats } from "../_store";
 
 function buildResumeContext() {
   const lines: string[] = [];
@@ -74,16 +75,23 @@ export async function POST(req: NextRequest) {
     }
 
     // Optional origin allow-list (set NEXT_PUBLIC_SITE_URL for prod domain)
-    const origin = req.headers.get("origin") || "";
     const allowed = process.env.NEXT_PUBLIC_SITE_URL || "";
-    if (allowed && origin && !origin.startsWith(allowed)) {
-      return NextResponse.json(
-        { error: "Forbidden: invalid origin" },
-        { status: 403 },
-      );
+    if (allowed) {
+      try {
+        const allowedHost = new URL(allowed).host.replace(/^www\./, "");
+        const requestHost = req.nextUrl.host.replace(/^www\./, "");
+        if (allowedHost && requestHost && requestHost !== allowedHost) {
+          return NextResponse.json(
+            { error: "Forbidden: invalid origin host" },
+            { status: 403 },
+          );
+        }
+      } catch {
+        // If parsing fails, skip allow-list enforcement
+      }
     }
 
-    const { message, sessionId } = await req.json();
+    const { message, sessionId, history, persona } = await req.json();
 
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.ip || "unknown";
     if (isRateLimited(ip)) {
@@ -127,6 +135,8 @@ Style: friendly, professional, concise (1-3 sentences), concrete; include metric
 Avoid speculation, personal data not present in context, or commitments.
 `;
 
+    const personaBlock = persona ? `\nCharacter Persona:\nName: ${persona.name || "Naoise Law"}\nRole: ${persona.role || ""}\nPersonality: ${persona.personality || ""}\nQuirk: ${persona.quirk || ""}\n` : "";
+
     const contextBlock = `
 Context (trusted facts):
 Site: ${DATA.url}
@@ -135,7 +145,27 @@ ${resumeContext}
 ${projectsContext}
 `;
 
-    const prompt = `${instruction}\n\n${contextBlock}\n\nUser question: ${trimmed}`;
+    let historyBlock = "";
+    if (Array.isArray(history) && history.length > 0) {
+      const last = history.slice(-6);
+      historyBlock =
+        "\nRecent conversation (user -> you):\n" +
+        last
+          .map((h: any) => `User: ${String(h.user || "").slice(0, 500)}\nYou: ${String(h.ai || "").slice(0, 500)}`)
+          .join("\n");
+    }
+
+    // Augment with server-side recent history (cross-session) if available
+    const personaKey = `${persona?.name || "Naoise Law"}|${persona?.role || ""}`;
+    const prior = await recentChats(personaKey, 6);
+    if (prior.length > 0) {
+      const priorBlock =
+        "\nCross-session context:\n" +
+        prior.map((h) => `User: ${h.user}\nYou: ${h.ai}`).join("\n");
+      historyBlock += priorBlock;
+    }
+
+    const prompt = `${instruction}\n${personaBlock}\n${contextBlock}\n${historyBlock}\n\nUser question: ${trimmed}`;
 
     const result = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -147,6 +177,12 @@ ${projectsContext}
     });
 
     const text = result?.response?.text?.() || "I’m not fully sure from the available context—could you share a bit more?";
+
+    // Persist this turn and update FAQ stats
+    try {
+      await appendChat(personaKey, trimmed, text);
+      await incrementFaq(trimmed);
+    } catch {}
 
     return NextResponse.json({ message: text, sessionId: sessionId || null });
   } catch (err: any) {

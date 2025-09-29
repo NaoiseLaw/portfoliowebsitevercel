@@ -47,7 +47,8 @@ GOOGLE_API_KEY=your-google-generative-ai-key
 
 Notes:
 - `GOOGLE_API_KEY` is used by `/api/simulator/chat` to power live LLM chat in the simulator.
-- Never expose the key on the client; it is only read on the server.
+- `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (optional) enable cross-session chat memory and centralized FAQ analytics. If unset, localStorage is used per-browser only.
+- Never expose keys on the client; they are only read on the server.
 
 ### Security and secrets
 - `.env.local` and other env files are gitignored (see `.gitignore`).

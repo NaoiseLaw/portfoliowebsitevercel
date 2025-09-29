@@ -1097,7 +1097,49 @@
                 }
             }
         };
-        
+
+        // ===== Persistent Chat History & FAQ Tracking =====
+        function getPersonaKey(character) {
+            return `${character.userData.name}|${character.userData.role}`;
+        }
+
+        function loadHistory(personaKey) {
+            try {
+                const raw = localStorage.getItem('simHistory_' + personaKey);
+                return raw ? JSON.parse(raw) : [];
+            } catch { return []; }
+        }
+
+        function saveHistory(personaKey, conversations) {
+            try {
+                const capped = conversations.slice(-50);
+                localStorage.setItem('simHistory_' + personaKey, JSON.stringify(capped));
+            } catch {}
+        }
+
+        function recordFAQ(question) {
+            try {
+                const key = 'simFAQStats';
+                const raw = localStorage.getItem(key);
+                const stats = raw ? JSON.parse(raw) : {};
+                const q = String(question || '').trim().toLowerCase();
+                if (!q) return;
+                stats[q] = (stats[q] || 0) + 1;
+                localStorage.setItem(key, JSON.stringify(stats));
+            } catch {}
+        }
+
+        function getTopFAQs(limit) {
+            try {
+                const raw = localStorage.getItem('simFAQStats');
+                const stats = raw ? JSON.parse(raw) : {};
+                return Object.entries(stats)
+                    .sort((a,b) => b[1]-a[1])
+                    .slice(0, limit)
+                    .map(([q]) => q);
+            } catch { return []; }
+        }
+
         function openDialogue(character) {
             currentCharacter = character;
             dialogueBox.style.display = 'block';
@@ -1112,6 +1154,13 @@
             
             const characterKey = character.userData.name + ' - ' + character.userData.role;
             const characterData = naoiseResponses[characterKey];
+
+            // Load prior conversation history for this persona
+            const personaKey = getPersonaKey(character);
+            const prior = loadHistory(personaKey);
+            if (character.userData.conversations.length === 0 && prior.length > 0) {
+                character.userData.conversations = prior.slice(-6);
+            }
             
             if (character.userData.conversations.length === 0) {
                 const greeting = characterData ? 
@@ -1164,7 +1213,9 @@
             const shuffled = questions.sort(() => Math.random() - 0.5);
             
             dialogueOptions.innerHTML = '';
-            shuffled.slice(0, 3).forEach(question => {
+            const topFaqs = getTopFAQs(3).filter(q => !questions.map(x=>x.toLowerCase()).includes(q));
+            const suggestions = [...shuffled.slice(0, 2), ...topFaqs.slice(0, 1)];
+            suggestions.forEach(question => {
                 const option = document.createElement('div');
                 option.className = 'dialogue-option';
                 option.textContent = question;
@@ -1198,7 +1249,14 @@
                     },
                     body: JSON.stringify({
                         message: question,
-                        sessionId: 'simulator-session'
+                        sessionId: 'simulator-session',
+                        history: currentCharacter.userData.conversations.map(c => ({ user: c.user, ai: c.response })),
+                        persona: {
+                          name: currentCharacter.userData.name,
+                          role: currentCharacter.userData.role,
+                          personality: currentCharacter.userData.personality,
+                          quirk: currentCharacter.userData.quirk,
+                        }
                     })
                 });
                 
@@ -1216,6 +1274,12 @@
                     user: question,
                     response: responseText
                 });
+                // Persist history and FAQ stats
+                try {
+                    const personaKey = getPersonaKey(currentCharacter);
+                    saveHistory(personaKey, currentCharacter.userData.conversations);
+                    recordFAQ(question);
+                } catch {}
                 
                 // Update display
                 dialogueContent.innerHTML = dialogueContent.innerHTML.replace(
@@ -1250,6 +1314,12 @@
                     user: question,
                     response: responseText
                 });
+                // Persist history and FAQ stats (fallback path)
+                try {
+                    const personaKey = getPersonaKey(currentCharacter);
+                    saveHistory(personaKey, currentCharacter.userData.conversations);
+                    recordFAQ(question);
+                } catch {}
                 
                 // Update display
                 dialogueContent.innerHTML = dialogueContent.innerHTML.replace(

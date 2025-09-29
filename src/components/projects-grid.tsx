@@ -5,7 +5,7 @@ import BlurFade from "@/components/magicui/blur-fade";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-export function ProjectsGrid({ projects }: { projects: any[] }) {
+export function ProjectsGrid({ projects }: { projects: readonly any[] }) {
   const tabs = ["All", "AI/ML", "Enterprise", "Business", "Academic"] as const;
   const [active, setActive] = useState<(typeof tabs)[number]>("All");
   const [q, setQ] = useState("");

@@ -33,14 +33,8 @@ const navigation: NavItem[] = [
   },
   {
     name: "Projects",
-    href: "/#projects",
-    icon: FolderIcon,
-    children: [
-      { name: "Chat Collect", href: "https://chatcollect.com", icon: FolderIcon },
-      { name: "Magic UI", href: "https://magicui.design", icon: FolderIcon },
-      { name: "llm.report", href: "https://llm.report", icon: FolderIcon },
-      { name: "Automatic Chat", href: "https://automatic.chat", icon: FolderIcon },
-    ]
+    href: "/projects",
+    icon: FolderIcon
   },
   { name: "Skills", href: "/#skills", icon: WrenchScrewdriverIcon },
   { name: "Contact", href: "/#contact", icon: EnvelopeIcon },
