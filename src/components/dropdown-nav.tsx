@@ -28,7 +28,7 @@ const navigation: NavItem[] = [
   { name: "About", href: "/#about", icon: UserIcon },
   { 
     name: "Interactive Experience", 
-    href: "http://localhost:3001/simulator", 
+    href: "/simulator", 
     icon: PlayIcon 
   },
   {

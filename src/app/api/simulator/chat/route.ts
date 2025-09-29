@@ -73,6 +73,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Optional origin allow-list (set NEXT_PUBLIC_SITE_URL for prod domain)
+    const origin = req.headers.get("origin") || "";
+    const allowed = process.env.NEXT_PUBLIC_SITE_URL || "";
+    if (allowed && origin && !origin.startsWith(allowed)) {
+      return NextResponse.json(
+        { error: "Forbidden: invalid origin" },
+        { status: 403 },
+      );
+    }
+
     const { message, sessionId } = await req.json();
 
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.ip || "unknown";
