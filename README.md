@@ -36,6 +36,24 @@ This repository powers my personal portfolio site showcasing my product work: ca
 
    ```bash
    pnpm dev
+### Environment variables
+
+Create a `.env.local` in the project root with:
+
+```
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+GOOGLE_API_KEY=your-google-generative-ai-key
+```
+
+Notes:
+- `GOOGLE_API_KEY` is used by `/api/simulator/chat` to power live LLM chat in the simulator.
+- Never expose the key on the client; it is only read on the server.
+
+### Security and secrets
+- `.env.local` and other env files are gitignored (see `.gitignore`).
+- Never commit real keys. If leaked, rotate the key in Google and update env.
+- The chat API has basic rate limiting and validates inputs server-side.
+
    ```
 
 3. Update portfolio content

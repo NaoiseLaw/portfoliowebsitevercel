@@ -416,7 +416,7 @@
         
         TestSuite.addTest('API Endpoint', () => {
             // Test if we can reach the chat endpoint
-            return fetch('/simulator/chat', {
+            return fetch('/api/simulator/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: 'test', sessionId: 'test' })
@@ -1191,7 +1191,7 @@
             
             try {
                 // Call the AI API
-                const response = await fetch('/simulator/chat', {
+                const response = await fetch('/api/simulator/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
