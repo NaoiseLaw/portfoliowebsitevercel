@@ -130,7 +130,7 @@ export default function Page() {
           </BlurFade>
           {/* Featured */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[900px] mx-auto">
-            {DATA.projects.filter((p) => p.featured).slice(0, 4).map((project, id) => (
+            {DATA.projects.filter((p) => (p as any).featured).slice(0, 4).map((project, id) => (
               <BlurFade
                 key={project.title}
                 delay={BLUR_FADE_DELAY * 12 + id * 0.05}
@@ -150,7 +150,7 @@ export default function Page() {
           </div>
           {/* More */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto">
-            {DATA.projects.filter((p) => !p.featured).map((project, id) => (
+            {DATA.projects.filter((p) => !(p as any).featured).map((project, id) => (
               <BlurFade
                 key={project.title}
                 delay={BLUR_FADE_DELAY * 12 + id * 0.03}
