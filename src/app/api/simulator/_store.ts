@@ -1,8 +1,9 @@
 const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
 const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function upstash(cmd: string[], parseJson = true): Promise<any> {
+type UpstashResult = unknown;
+
+async function upstash(cmd: string[], parseJson = true): Promise<UpstashResult> {
   if (!UPSTASH_URL || !UPSTASH_TOKEN) return null;
   const res = await fetch(UPSTASH_URL, {
     method: "POST",
@@ -53,8 +54,7 @@ export async function recentChats(personaKey: string, limit = 10): Promise<{ use
     .filter(Boolean)
     .map((o: unknown) => {
       if (typeof o === "object" && o && "user" in o && "ai" in o) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const ob = o as any;
+        const ob = o as { user?: string; ai?: string };
         return { user: String(ob.user || ""), ai: String(ob.ai || "") };
       }
       return { user: "", ai: "" };
