@@ -11,7 +11,7 @@ export const DATA = {
     "MSc student at LSE specializing in AI and Digital Innovation. Passionate about using technology to solve complex business problems and automate processes.",
   summary:
     "I'm currently pursuing my MSc in Managing Information Systems and Digital Innovation at the London School of Economics, focusing on how AI tools can transform business processes. My dissertation explored how AI tools impact software developers' workflows, involving extensive research with programmers on tool integration and workflow optimization. Previously, I worked in private equity at SEIC, where I supervised five funds and built predictive analytics dashboards. My diverse background spans finance, audit, and operations, where I consistently identified inefficiencies and built solutions - from creating tracking tools for 16-entity audits at Grant Thornton to managing large-scale events at Dublin Fringe Festival hosting 8,000+ guests. I'm passionate about the intersection of technology and business, particularly in making processes more efficient through automation and AI.",
-  avatarUrl: "/naoise.png",
+  avatarUrl: "/Naoise.jpeg",
   skills: [
     "Python",
     "AI/ML Tools",

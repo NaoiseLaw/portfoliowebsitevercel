@@ -207,8 +207,10 @@ ${projectsContext}
 
     return NextResponse.json({ message: text, sessionId: sessionId || null });
   } catch (err: any) {
+    console.error("❌ Simulator chat error:", err);
+    console.error("Error details:", JSON.stringify(err, null, 2));
     return NextResponse.json(
-      { error: "Failed to process chat message", message: err?.message || "Unknown error" },
+      { error: "Failed to process chat message", message: err?.message || "Unknown error", details: err?.toString?.() || "" },
       { status: 500 },
     );
   }
