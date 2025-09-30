@@ -169,6 +169,29 @@ export const DATA = {
   ],
   projects: [
     {
+      title: "3D Portfolio Simulator with AI Interview Assistant",
+      slug: "3d-portfolio-simulator",
+      href: "/projects/3d-portfolio-simulator",
+      dates: "September 2024",
+      location: "Personal Project",
+      featured: true,
+      description:
+        "Interactive 3D recruitment simulator combining Three.js graphics with Gemini AI for engaging AI-powered portfolio conversations.",
+      technologies: ["Three.js", "Google Gemini API", "Next.js 14", "TypeScript", "WebGL"],
+      links: [
+        { type: "website", label: "Try Live Demo", url: "/simulator" },
+      ],
+      metrics: { personas: "3 AI characters", context: "Real-time portfolio integration", responses: "AI-powered" },
+      problem:
+        "Static portfolios fail to engage recruiters or demonstrate technical + product thinking in memorable ways.",
+      solution:
+        "Built immersive 3D experience where AI personas answer interview questions grounded in actual work history.",
+      role: "Full-Stack Developer & Designer",
+      artifacts: [
+        { type: "demo", label: "Live Simulator", url: "/simulator" },
+      ],
+    },
+    {
       title: "Reddit Racism Analyzer",
       slug: "reddit-racism-analyzer",
       href: "/projects/reddit-racism-analyzer",

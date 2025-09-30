@@ -1,0 +1,101 @@
+---
+title: "3D Portfolio Simulator with AI Interview Assistant"
+publishedAt: "2025-09-30"
+summary: "Interactive 3D recruitment simulator combining Three.js graphics with Gemini AI to create an engaging, conversational portfolio experience where recruiters can explore my background through AI-powered interviews."
+images:
+  - "/images/projects/simulator/hero.svg"
+  - "/images/projects/simulator/characters.svg"
+  - "/images/projects/simulator/chat-interface.svg"
+link: "https://naoiselaw.com/simulator"
+technologies:
+  - "Three.js"
+  - "Google Gemini API"
+  - "Next.js 14"
+  - "TypeScript"
+  - "Tailwind CSS"
+  - "WebGL"
+---
+
+## Overview
+
+An innovative 3D portfolio experience that transforms the traditional resume into an interactive recruitment simulator. Built with Three.js and powered by Google's Gemini AI, this project allows recruiters to explore my background through natural conversations with three AI personas representing different aspects of my skill set.
+
+## Key Features
+
+- **Immersive 3D Environment**: California-style office with custom lighting, furniture, and ambient elements
+- **Three AI Personas**: Technical PM, Product Leader, and Innovation Designer variants of myself
+- **Real-time AI Conversations**: Context-aware responses grounded in my actual work experience using Gemini 1.5 Flash
+- **Smart Context Engine**: Automatically surfaces relevant projects, metrics, and technologies from my portfolio
+- **Persistent Conversations**: LocalStorage + optional Redis integration for cross-session memory
+- **FAQ Analytics**: Tracks most-asked questions to improve responses over time
+- **Built-in Debugging**: Performance monitors, API health checks, and comprehensive test suite (Ctrl+Shift+D/T/P)
+
+## Technical Architecture
+
+### Frontend (Three.js + Plain JS)
+- Custom character rendering with procedural animations (walking, dancing, "tripping")
+- First-person camera controls with WASD movement and mouse/arrow look
+- Collision detection and interaction proximity system
+- Dynamic UI with dialogue boxes, question suggestions, and custom input
+- Performance monitoring with FPS counter and memory tracking
+
+### Backend (Next.js API Routes)
+- **Route**: `/api/simulator/chat` - Main AI endpoint
+- **Model**: Google Gemini 1.5 Flash (640 token responses, temperature 0.6)
+- **Context Building**: Pulls from `resume.tsx` (skills, work history) and `projects/*.mdx` (recent projects with tech stacks)
+- **Guardrails**: 
+  - Strictly grounded in portfolio context (no hallucinations)
+  - Deflects overly personal questions
+  - Redirects off-topic queries back to relevant experience
+  - First-person tone, 2-3 paragraph responses with metrics
+- **Rate Limiting**: Token bucket (10 req/min per IP)
+- **Validation**: Input sanitization, 500-char limit, origin checks in production
+
+### Prompt Engineering
+Engineered system prompt to:
+- Respond as me in simulated interview scenarios
+- Tailor responses by persona (technical, leadership, design)
+- Include markdown links to specific project pages when relevant
+- Handle common interview questions ("Tell me about yourself", "Walk me through Project X", etc.)
+- Maintain professional yet conversational tone
+
+### Optional Integrations
+- **Upstash Redis**: Cross-session chat history and FAQ analytics
+- **Environment Variables**: Accepts both `GOOGLE_API_KEY` and `GOOGLE_AI_API_KEY` for flexibility
+
+## Innovation Highlights
+
+1. **Context-Aware AI**: Unlike generic chatbots, responses are grounded in my actual resume/projects, ensuring accurate representation
+2. **Persona-Based Emphasis**: Three characters highlight different skill dimensions (technical depth, leadership impact, design thinking)
+3. **Recruiter-Friendly UX**: Sample questions reduce friction; custom input allows open-ended exploration
+4. **Production-Ready Error Handling**: Clear error messages, no silent fallbacks, robust origin validation
+
+## Impact & Use Cases
+
+- **Engagement**: Transforms static portfolio into memorable interactive experience
+- **Filtering**: Lets recruiters self-qualify interest by exploring specific skills/projects
+- **Scalability**: AI handles unlimited concurrent "interviews" without my time
+- **Analytics**: Tracks which questions/projects generate most interest
+- **Differentiation**: Stands out in competitive PM/tech roles by demonstrating technical + product thinking
+
+## Technical Challenges Solved
+
+1. **API Key Security**: Dual env var support, production-only origin checks, server-side-only key access
+2. **Fallback Strategy**: Removed canned responses to ensure AI-first experience; surfaces errors explicitly
+3. **Context Management**: Balance between rich context (resume + projects) and token limits
+4. **Conversation Memory**: Hybrid approach (browser localStorage + optional Redis) for stateless scalability
+5. **Performance**: Optimized Three.js scene to maintain 60 FPS with character AI, physics, and UI
+
+## Future Enhancements
+
+- Streaming responses for longer answers
+- Voice input/output for accessibility
+- Multiplayer mode (multiple recruiters in same space)
+- Analytics dashboard for portfolio owner
+- Mobile touch controls optimization
+
+---
+
+**Try it live**: [naoiselaw.com/simulator](https://naoiselaw.com/simulator)
+
+**Debug shortcuts**: Ctrl+Shift+T (tests), Ctrl+Shift+D (debug console), Ctrl+Shift+P (performance)

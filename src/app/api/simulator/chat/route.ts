@@ -31,10 +31,11 @@ async function buildProjectsContext() {
     const top = posts
       .sort((a, b) => new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime())
       .slice(0, 5);
-    const lines: string[] = ["Projects:"];
+    const lines: string[] = ["Projects (with links):"];
     top.forEach((p) => {
       const tech = p.metadata.technologies?.slice(0, 8).join(", ") || "";
-      lines.push(`- ${p.metadata.title} (${p.metadata.publishedAt}) — ${p.metadata.summary}${tech ? ` [Tech: ${tech}]` : ""}`);
+      const url = `${DATA.url}/projects/${p.slug}`;
+      lines.push(`- ${p.metadata.title} (${p.metadata.publishedAt}) — ${p.metadata.summary}${tech ? ` [Tech: ${tech}]` : ""} — URL: ${url}`);
     });
     return lines.join("\n");
   } catch {
@@ -66,17 +67,18 @@ function isRateLimited(ip: string): boolean {
 
 export async function POST(req: NextRequest) {
   try {
-    const apiKey = process.env.GOOGLE_API_KEY;
+    // Accept either env var name to avoid configuration mismatches
+    const apiKey = process.env.GOOGLE_API_KEY || process.env.GOOGLE_AI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "Server misconfiguration: missing GOOGLE_API_KEY" },
+        { error: "Server misconfiguration: missing GOOGLE_API_KEY/GOOGLE_AI_API_KEY" },
         { status: 500 },
       );
     }
 
     // Optional origin allow-list (set NEXT_PUBLIC_SITE_URL for prod domain)
     const allowed = process.env.NEXT_PUBLIC_SITE_URL || "";
-    if (allowed) {
+    if (process.env.NODE_ENV === "production" && allowed) {
       try {
         const allowedHost = new URL(allowed).host.replace(/^www\./, "");
         const requestHost = req.nextUrl.host.replace(/^www\./, "");
@@ -130,10 +132,28 @@ export async function POST(req: NextRequest) {
     const projectsContext = await buildProjectsContext();
 
     const instruction = `
-You are acting as Naoise Law inside an interactive portfolio simulator.
-Use ONLY the facts in the provided context when answering. If the answer is not covered, say you are unsure and ask a brief clarifying question.
-Style: friendly, professional, concise (1-3 sentences), concrete; include metrics or technologies when relevant.
-Avoid speculation, personal data not present in context, or commitments.
+You are Naoise Law answering questions in a simulated interview on my portfolio site.
+
+Rules and guardrails:
+- Stay in character as me (first person: "I").
+- Ground answers ONLY in the provided context (resume, projects, skills). Do not invent projects or experience.
+- If asked something not covered, say you're unsure and ask ONE brief clarifying question; optionally suggest a relevant topic from my background.
+- Deflect overly personal questions (e.g., age, address, family, salary history) with a polite line like: "I'd prefer to discuss that in a real conversation," and redirect back to my background.
+- Do not share contact details beyond what is already public.
+- If the question is off-topic, briefly steer back to my experience or projects.
+
+Style:
+- Professional, conversational, and enthusiastic about tech and product work.
+- Aim for 2–3 short paragraphs (2–6 sentences each). Be concise and concrete; include metrics, technologies, and outcomes when relevant.
+- If a persona is provided (technical, leadership, design), emphasize that angle.
+ - When referencing a specific project or relevant skill page, include a markdown link to the project page if available (format: [Project Name](https://...)).
+
+Common interview intents:
+- "Tell me about yourself" → connect LSE MSc, AI/product focus, and prior roles (SEIC, Bank of Ireland, Grant Thornton) with a product management narrative.
+- "Biggest achievement" → highlight hackathon win (94% accuracy ML), enterprise automation impact (e.g., $1.5B operations, 65% efficiency gains), or notable project outcomes.
+- "Walk me through Project X" → outline problem → approach → technologies → result/metrics.
+- "Why product management?" → user-centric, impact-driven, blend of tech + strategy.
+- "Strengths/weaknesses" → strengths tied to evidence; weaknesses framed with mitigation.
 `;
 
     const personaBlock = persona ? `\nCharacter Persona:\nName: ${persona.name || "Naoise Law"}\nRole: ${persona.role || ""}\nPersonality: ${persona.personality || ""}\nQuirk: ${persona.quirk || ""}\n` : "";
@@ -171,9 +191,9 @@ ${projectsContext}
     const result = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: prompt }] }],
       generationConfig: {
-        temperature: 0.5,
+        temperature: 0.6,
         topP: 0.9,
-        maxOutputTokens: 256,
+        maxOutputTokens: 640,
       },
     });
 
