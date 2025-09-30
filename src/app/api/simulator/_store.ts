@@ -1,6 +1,7 @@
 const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
 const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function upstash(cmd: string[], parseJson = true): Promise<any> {
   if (!UPSTASH_URL || !UPSTASH_TOKEN) return null;
   const res = await fetch(UPSTASH_URL, {
@@ -9,11 +10,7 @@ async function upstash(cmd: string[], parseJson = true): Promise<any> {
       Authorization: `Bearer ${UPSTASH_TOKEN}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      // Upstash REST format
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      commands: [cmd as any],
-    }),
+    body: JSON.stringify({ commands: [cmd] }),
     cache: "no-store",
   });
   if (!res.ok) return null;
@@ -54,7 +51,15 @@ export async function recentChats(personaKey: string, limit = 10): Promise<{ use
       try { return JSON.parse(s); } catch { return null; }
     })
     .filter(Boolean)
-    .map((o: any) => ({ user: String(o.user || ""), ai: String(o.ai || "") }));
+    .map((o: unknown) => {
+      if (typeof o === "object" && o && "user" in o && "ai" in o) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const ob = o as any;
+        return { user: String(ob.user || ""), ai: String(ob.ai || "") };
+      }
+      return { user: "", ai: "" };
+    })
+    .filter((x) => x.user || x.ai);
 }
 
 
