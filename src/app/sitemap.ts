@@ -1,11 +1,13 @@
 import { getBlogPosts } from "@/data/blog";
 import { getProjectPosts } from "@/data/projects";
+import { DATA } from "@/data/resume";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
   const blog = await getBlogPosts();
   const projects = await getProjectPosts();
+  const curated = (DATA.projects as readonly any[]).map((p) => ({ url: `${baseUrl}${p.href}` }));
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/`, changeFrequency: "weekly", priority: 1 },
@@ -23,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
   }));
 
-  return [...staticRoutes, ...blogRoutes, ...projectRoutes];
+  return [...staticRoutes, ...blogRoutes, ...projectRoutes, ...curated];
 }
 
 

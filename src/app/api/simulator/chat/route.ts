@@ -80,7 +80,8 @@ export async function POST(req: NextRequest) {
       try {
         const allowedHost = new URL(allowed).host.replace(/^www\./, "");
         const requestHost = req.nextUrl.host.replace(/^www\./, "");
-        if (allowedHost && requestHost && requestHost !== allowedHost) {
+        const isPreview = requestHost.endsWith(".vercel.app");
+        if (allowedHost && requestHost && requestHost !== allowedHost && !isPreview) {
           return NextResponse.json(
             { error: "Forbidden: invalid origin host" },
             { status: 403 },
