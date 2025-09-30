@@ -28,9 +28,10 @@ export async function incrementFaq(question: string): Promise<void> {
 
 export async function topFaqs(limit = 10): Promise<string[]> {
   if (!UPSTASH_URL || !UPSTASH_TOKEN) return [];
-  const res = await upstash(["ZREVRANGE", "faq:counts", "0", String(limit - 1)]);
-  if (!res || !Array.isArray(res.result)) return [];
-  return res.result as string[];
+  const res = (await upstash(["ZREVRANGE", "faq:counts", "0", String(limit - 1)])) as unknown;
+  if (!res || typeof res !== "object" || !("result" in (res as Record<string, unknown>))) return [];
+  const arr = (res as { result?: unknown }).result;
+  return Array.isArray(arr) ? (arr as string[]) : [];
 }
 
 export async function appendChat(personaKey: string, user: string, ai: string): Promise<void> {
@@ -44,9 +45,10 @@ export async function appendChat(personaKey: string, user: string, ai: string): 
 export async function recentChats(personaKey: string, limit = 10): Promise<{ user: string; ai: string }[]> {
   if (!UPSTASH_URL || !UPSTASH_TOKEN) return [];
   const key = `chat:${personaKey}`;
-  const res = await upstash(["LRANGE", key, String(-limit), "-1"]);
-  if (!res || !Array.isArray(res.result)) return [];
-  const arr = res.result as string[];
+  const res = (await upstash(["LRANGE", key, String(-limit), "-1"])) as unknown;
+  if (!res || typeof res !== "object" || !("result" in (res as Record<string, unknown>))) return [];
+  const arr = (res as { result?: unknown }).result;
+  if (!Array.isArray(arr)) return [];
   return arr
     .map((s) => {
       try { return JSON.parse(s); } catch { return null; }
