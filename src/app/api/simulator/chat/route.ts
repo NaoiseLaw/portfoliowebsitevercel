@@ -95,6 +95,11 @@ export async function POST(req: NextRequest) {
     }
 
     const { message, sessionId, history, persona } = await req.json();
+    
+    // Debug logging
+    console.log("📝 Received message:", message);
+    console.log("👤 Persona:", persona);
+    console.log("📚 History length:", history?.length || 0);
 
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.ip || "unknown";
     if (isRateLimited(ip)) {
@@ -126,10 +131,13 @@ export async function POST(req: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const resumeContext = buildResumeContext();
     const projectsContext = await buildProjectsContext();
+    
+    console.log("📋 Resume context:", resumeContext.substring(0, 200) + "...");
+    console.log("🚀 Projects context:", projectsContext.substring(0, 200) + "...");
 
     const instruction = `
 You are Naoise Law answering questions in a simulated interview on my portfolio site.
@@ -188,6 +196,9 @@ ${projectsContext}
 
     const prompt = `${instruction}\n${personaBlock}\n${contextBlock}\n${historyBlock}\n\nUser question: ${trimmed}`;
 
+    console.log("🤖 Full prompt length:", prompt.length);
+    console.log("🔍 Prompt preview:", prompt.substring(0, 500) + "...");
+
     const result = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: prompt }] }],
       generationConfig: {
@@ -197,7 +208,9 @@ ${projectsContext}
       },
     });
 
-    const text = result?.response?.text?.() || "I’m not fully sure from the available context—could you share a bit more?";
+    const text = result?.response?.text?.() || "I'm not fully sure from the available context—could you share a bit more?";
+    
+    console.log("💬 Generated response:", text.substring(0, 200) + "...");
 
     // Persist this turn and update FAQ stats
     try {

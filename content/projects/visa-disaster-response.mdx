@@ -1,7 +1,7 @@
 ---
-title: "Vis(AI)D: Visa Sprint Week Finalist – GenAI ERP Recovery for SMEs"
-publishedAt: "2025-01-20"
-summary: "🏆 LSE Sprint Week Finalist with Visa & Roland Berger. Revolutionary GenAI platform increasing SME disaster survival rates by 65% through real-time ERP monitoring and AI-driven recovery recommendations, targeting $50B+ annual disaster impact market."
+title: "Visa Disaster Response Platform"
+publishedAt: "2024-01-20"
+summary: "Top 4 finalist from 20+ teams. Built AI-powered disaster recovery platform for SMEs in 5 days."
 images:
   - "/images/projects/visa-disaster-response/visaid-graph.jpg"
   - "/images/projects/visa-disaster-response/visaid-class-diagram.jpg"
@@ -12,25 +12,17 @@ images:
   - "/images/projects/visa-disaster-response/team.jpeg"
 technologies:
   - "Next.js"
-  - "GenAI"
-  - "SEM"
-  - "ERP signals"
-  - "Design"
   - "PostgreSQL"
-  - "OpenAI API"
-  - "Real-time Analytics"
+  - "OpenAI"
+  - "Figma"
 metrics:
-  survival_improvement: "65% SME survival rate increase"
-  market_size: "$50B+ disaster impact market"
-  competition_rank: "Top 3 Finalist"
-  team_size: "5-person multidisciplinary team"
-  development_time: "5-day sprint to MVP"
-  erp_integration: "Real-time ERP monitoring"
-  response_time: "<72 hour critical window"
-  ai_accuracy: "87% recommendation accuracy"
+  competition_rank: "Top 4 finalist"
+  team_size: "5-person team"
+  development_time: "5-day sprint"
+  market_opportunity: "£8B market"
 team:
   - name: "Naoise Law"
-    role: "Product Lead & Technical Architect"
+    role: "Product Lead & Technical Architecture"
     avatar: "/images/avatar.jpg"
     linkedIn: "https://linkedin.com/in/naoise-law"
 downloads:
@@ -42,243 +34,172 @@ downloads:
     size: "3.8 MB"
 ---
 
+## Problem
+
+SMEs lack disaster recovery resources—40% fail within 2 years of major disasters. Critical data is fragmented across systems, making the crucial first 72 hours chaotic and reactive.
+
+## Solution
+
+Vis(AI)D: AI-powered platform that monitors SME ERP data in real-time and provides contextual recommendations during disasters. Centralized dashboard with AI triage, resource allocation insights, and automated stakeholder communication.
+
+## My Role
+
+Product Lead & Technical Architecture
+
+## Tech Stack
+
+- Next.js
+- PostgreSQL  
+- OpenAI
+- Figma
+
 ## Overview
 
-Vis(AI)D is an innovative GenAI-powered disaster recovery platform designed to help Small and Medium Enterprises (SMEs) navigate the critical first 72 hours after natural disasters. Developed during LSE Sprint Week in partnership with Visa and Roland Berger, this solution combines real-time ERP monitoring with AI-driven recommendations to dramatically improve SME survival rates post-disaster.
+Vis(AI)D is a GenAI-powered disaster recovery platform developed during LSE Sprint Week in partnership with Visa and Roland Berger. The solution combines real-time ERP monitoring with AI-driven recommendations to help SMEs navigate the critical first 72 hours after natural disasters.
 
-The project addresses a critical gap: while large corporations have dedicated disaster recovery teams, SMEs—which represent 99.9% of businesses in the EU—often lack the resources and expertise to respond effectively to natural disasters, leading to a 40% failure rate within two years of a major incident.
+We identified a £8B market opportunity: while large corporations have dedicated disaster recovery teams, SMEs (99.9% of EU businesses) lack resources to respond effectively to disasters.
+
+![Full Project Overview](/images/projects/visa-disaster-response/VISA AID Full Project.jpeg)
 
 ## Challenge Context
 
-### The Competition
 - **Event**: LSE Sprint Week 2025 - Visa x Roland Berger Challenge
-- **Brief**: Develop a commercial GenAI application that demonstrates Visa's innovation leadership
+- **Brief**: Develop a commercial GenAI application demonstrating Visa's innovation leadership
 - **Timeline**: 5 days from concept to Dragons' Den presentation
-- **Evaluation Criteria**: Commercial viability, technical feasibility, innovation, and alignment with Visa's strategic goals
+- **Team**: 5 members (Product, Engineering, Design, Business Strategy)
+- **Outcome**: Top 4 finalist from 20+ competing teams
 
-### Team Composition
-- **My Role**: Product Lead & Product Manager
-- **Team Size**: 6 members (Product, Engineering, Design, Business Strategy)
-- **Methodology**: Soft Ecosystem Methodology (SEM) for systems thinking
-- **Outcome**: Selected as one of 3 finalists from 40+ competing teams
+## Methodology
 
-## Problem Analysis
+We applied three complementary frameworks:
 
-### The SME Disaster Recovery Challenge
-- **Scale**: 25 million SMEs in Europe, 99.9% of all businesses
-- **Vulnerability**: 40% of SMEs fail within 2 years of a major disaster
-- **Resource Constraints**: Limited capital, no dedicated disaster recovery teams
-- **Information Fragmentation**: Critical data scattered across multiple systems and stakeholders
-- **Time Pressure**: First 72 hours are critical for recovery trajectory
+**Soft Systems Methodology (SSM)**: Structured problem analysis and stakeholder mapping
 
-### Current Solution Gaps
-- **Static Playbooks**: One-size-fits-all approaches that don't adapt to specific business contexts
-- **Siloed Systems**: ERP, banking, insurance, and supply chain data exist in isolation
-- **Reactive Approach**: Businesses wait for problems to manifest before taking action
-- **Limited Expertise**: SMEs lack disaster recovery specialists and best-practice knowledge
+**Sprint Framework**: Rapid prototyping and iterative development in 5-day cycle
 
-## Solution Architecture
+**Soft Ecosystem Methodology (SEM)**: Created by Will Venters, this approach extends SSM to consider interconnected business ecosystems—critical for disaster scenarios where recovery depends on external relationships (suppliers, customers, financial institutions)
 
-### Core Concept: Adaptive Ecosystem Intelligence
-Vis(AI)D transforms disaster recovery from reactive crisis management to proactive, AI-guided resilience building through:
+SEM was particularly valuable because disasters don't affect businesses in isolation. We designed Vis(AI)D to provide recommendations that consider the entire business ecosystem, not just individual company health.
 
-1. **Real-time ERP Monitoring**: Continuous analysis of business health indicators
-2. **Predictive Risk Assessment**: AI models that anticipate cascading failures
-3. **Contextual Recommendations**: Personalized action plans based on business type, size, and disaster impact
-4. **Ecosystem Orchestration**: Coordinated response across suppliers, customers, and financial partners
+![Graph Analysis](/images/projects/visa-disaster-response/visaid-graph.jpg)
 
-### Technical Implementation
+## Technical Implementation
 
-#### Data Integration Layer
-- **ERP Connectors**: APIs for SAP, QuickBooks, Xero, and 15+ major SME platforms
-- **Financial Data**: Real-time bank transaction monitoring via Visa's payment infrastructure
-- **External Signals**: Weather data, supply chain disruption alerts, regional economic indicators
-- **IoT Integration**: Sensor data from physical locations (flooding, power, connectivity)
+- **Data Integration**: Built universal ERP adapter connecting to SAP, QuickBooks, Xero
+- **AI Engine**: GPT-4 based recommendation system with business health scoring algorithm
+- **Dashboard**: Mobile-first crisis interface with color-coded priority actions
+- **Architecture**: Designed for 10x scale during multi-region disaster events
 
-#### AI Engine
-- **Disaster Impact Modeling**: Machine learning models trained on 10,000+ historical disaster scenarios
-- **Business Health Scoring**: Proprietary algorithm combining cash flow, inventory levels, and operational capacity
-- **Recommendation Engine**: GPT-4 based system fine-tuned on disaster recovery best practices
-- **Scenario Planning**: Monte Carlo simulations for different recovery pathways
+I designed the technical system architecture and UI/UX, applying sprint techniques and Wardley mapping to identify critical user journeys and technology dependencies.
 
-#### User Experience
-- **Crisis Dashboard**: Mobile-first interface optimized for high-stress decision making
-- **Action Prioritization**: Color-coded recommendations with impact/effort scoring
-- **Progress Tracking**: Real-time monitoring of recovery milestones and KPIs
-- **Stakeholder Communication**: Automated updates to employees, customers, and partners
+![Class Diagram](/images/projects/visa-disaster-response/visaid-class-diagram.jpg)
 
-### Methodology: Soft Ecosystem Methodology (SEM)
+## Key Features
 
-#### Why SEM Over Traditional Approaches
-Traditional Soft Systems Methodology (SSM) focuses on problem situations within organizational boundaries. SEM extends this to consider interconnected ecosystems, making it ideal for disaster scenarios where business recovery depends on external relationships and environmental factors.
+- Real-time business health monitoring across ERP systems
+- AI-generated action plans based on business type and disaster impact
+- Predictive risk assessment for cascading failures
+- Automated communication to employees, suppliers, and customers
+- Integration with Visa's payment data for transaction-based health insights
 
-#### SEM Application in Vis(AI)D
-1. **Holon Identification**: Mapped SMEs as adaptive units within larger economic ecosystems
-2. **Relationship Modeling**: Analyzed interdependencies between businesses, suppliers, customers, and financial institutions
-3. **Adaptive Capacity**: Designed system to evolve recommendations based on changing ecosystem conditions
-4. **Emergent Properties**: Leveraged network effects where collective recovery efforts strengthen individual business resilience
-
-## Technical Challenges & Solutions
-
-### 1. Real-time Data Integration at Scale
-**Challenge**: Ingesting and processing data from 50+ different ERP systems with varying APIs and data formats
-**Solution**: Built universal data adapter using GraphQL federation with automatic schema discovery
-
-### 2. AI Model Accuracy Under Stress
-**Challenge**: Ensuring AI recommendations remain accurate during chaotic disaster scenarios
-**Solution**: Implemented ensemble models with confidence scoring and human-in-the-loop validation for critical decisions
-
-### 3. Privacy and Security in Crisis
-**Challenge**: Accessing sensitive business data while maintaining security during emergency situations
-**Solution**: Developed zero-trust architecture with emergency access protocols and audit trails
-
-### 4. Scalability During Disaster Events
-**Challenge**: System must handle 10x normal load when disasters affect multiple regions simultaneously
-**Solution**: Designed auto-scaling cloud infrastructure with disaster-specific load balancing
+![UI & Wireframing](/images/projects/visa-disaster-response/visaid-ui-wireframes.jpg)
 
 ## Innovation Highlights
 
-### 1. Predictive Disaster Recovery
-Unlike reactive solutions, Vis(AI)D predicts potential business failures before they occur, allowing proactive intervention.
+**Ecosystem-Aware AI**: Unlike reactive solutions, considers supply chain and customer ecosystem when generating recommendations
 
-### 2. Ecosystem-Aware Recommendations
-Considers not just individual business health, but the entire supply chain and customer ecosystem when generating recommendations.
+**Visa Integration**: Leverages payment flow data to assess real-time business health and identify early warning signals
 
-### 3. Visa Integration Opportunities
-- **Payment Flow Analysis**: Leverage Visa's transaction data to assess real-time business health
-- **Emergency Funding**: Integration with Visa's lending products for disaster recovery financing
-- **Supply Chain Visibility**: Use payment patterns to map and monitor supply chain disruptions
+**Adaptive Learning**: System learns from each disaster event to improve future recommendations
 
-### 4. Adaptive Learning System
-AI models continuously learn from each disaster event, improving recommendations for future incidents.
+## Business Model
 
-## Business Model & Commercial Viability
+- **SaaS Subscription**: €199-999/month based on business size
+- **Emergency Response**: Pay-per-incident pricing (€2,500-10,000)
+- **Market Opportunity**: €15B disaster recovery market, 25M SMEs in Europe
+- **Beachhead**: Disaster-prone regions (Netherlands, Southern Europe)
 
-### Revenue Streams
-- **SaaS Subscription**: $199-999/month based on business size and complexity
-- **Emergency Response**: Pay-per-incident pricing for immediate disaster response ($2,500-10,000)
-- **Insurance Integration**: Revenue sharing with insurance providers for risk assessment
-- **Ecosystem Services**: Transaction fees for coordinating supplier/customer relationships
+## Results
 
-### Market Opportunity
-- **Primary Market**: 25M SMEs in Europe, 30M in North America
-- **Addressable Market**: $15B disaster recovery and business continuity market
-- **Beachhead Strategy**: Focus on disaster-prone regions (California, Florida, Netherlands)
+- **Competition**: Top 4 finalist from 20+ teams
+- **Presentation**: Successfully pitched to Visa executives and Roland Berger partners
+- **Validation**: Received positive feedback on technical feasibility and market opportunity
+- **Recognition**: Judges noted "ready to ship" quality and ecosystem thinking approach
 
-### Competitive Advantages
-- **First-mover Advantage**: No existing AI-native disaster recovery platforms for SMEs
-- **Visa Partnership**: Access to payment data provides unique business health insights
-- **Network Effects**: Platform becomes more valuable as more businesses join the ecosystem
+![Presenting](/images/projects/visa-disaster-response/presenting.jpeg)
 
-## My Leadership & Product Management
+## My Contributions
 
-### Product Strategy
-- **Vision Setting**: Defined product vision that aligned technical capabilities with market needs
-- **Stakeholder Alignment**: Coordinated between engineering, design, and business strategy teams
-- **Scope Management**: Balanced ambitious vision with 5-day development constraints
-
-### SEM Implementation
-- **Methodology Translation**: Converted academic SEM principles into practical product features
-- **Systems Thinking**: Applied ecosystem perspective to feature prioritization and user journey design
-- **Adaptive Design**: Built flexibility into product architecture to handle unpredictable disaster scenarios
-
-### Team Coordination
-- **Cross-functional Leadership**: Managed daily standups and sprint planning across disciplines
-- **Decision Making**: Made rapid product decisions under time pressure while maintaining quality
-- **Presentation Preparation**: Led Dragons' Den presentation strategy and pitch development
-
-## Results & Impact
-
-### Competition Outcome
-- **Finalist Selection**: Chosen as 1 of 3 finalists from 40+ competing teams
-- **Dragons' Den**: Successfully presented to panel of Visa executives and Roland Berger partners
-- **Feasibility Validation**: Received positive feedback on technical approach and market opportunity
-- **Strategic Interest**: Visa expressed interest in exploring partnership opportunities
-
-### Product Validation
-- **Market Research**: Validated problem with 50+ SME interviews during sprint week
-- **Technical Feasibility**: Demonstrated working prototype with real ERP integrations
-- **Business Model**: Developed comprehensive go-to-market strategy with clear revenue projections
-
-### Learning Outcomes
-- **SEM Mastery**: Gained deep expertise in ecosystem methodology and its practical applications
-- **Crisis Product Design**: Learned to design products for high-stress, time-critical scenarios
-- **Rapid Prototyping**: Developed skills in building complex products under extreme time constraints
-
-## Future Development Roadmap
-
-### Phase 1: MVP Development (6 months)
-- Core ERP integrations for top 5 platforms
-- Basic AI recommendation engine
-- Mobile crisis dashboard
-- Pilot with 50 SMEs in disaster-prone regions
-
-### Phase 2: Ecosystem Expansion (12 months)
-- Supply chain partner integrations
-- Insurance company partnerships
-- Advanced AI models with historical disaster data
-- Expansion to 500+ businesses
-
-### Phase 3: Platform Scale (18 months)
-- Full Visa payment infrastructure integration
-- International expansion (EU, North America)
-- Ecosystem marketplace for disaster recovery services
-- 10,000+ business network effects
+- **Product Strategy**: Defined product vision aligning technical capabilities with market needs
+- **Technical Architecture**: Designed system architecture using Wardley mapping for dependency analysis
+- **Team Leadership**: Coordinated daily standups and sprint planning across disciplines
+- **Presentation**: Led Dragons' Den pitch strategy and delivery
 
 ## Lessons Learned
 
-### Product Management in Crisis Contexts
-1. **Simplicity Under Stress**: User interfaces must be extremely simple when users are under extreme stress
-2. **Trust is Critical**: In crisis situations, trust in AI recommendations becomes paramount
-3. **Speed vs. Accuracy**: Finding the right balance between fast recommendations and accurate analysis
+- **Crisis Product Design**: Interfaces must be extremely simple when users are under stress
+- **Ecosystem Methodology**: SEM revealed partnership opportunities that traditional approaches missed
+- **Rapid Development**: 5-day constraint forced creative solutions and clear prioritization
+- **Stakeholder Complexity**: Disaster scenarios involve more stakeholders than typical product problems
 
-### Ecosystem Methodology
-1. **SEM Practical Value**: Ecosystem thinking provided unique insights that traditional approaches missed
-2. **Complexity Management**: SEM helped manage solution complexity while maintaining focus
-3. **Stakeholder Mapping**: Ecosystem perspective revealed unexpected partnership opportunities
+## Future Roadmap
 
-### Rapid Product Development
-1. **Constraint-Driven Innovation**: 5-day timeline forced creative solutions and rapid decision-making
-2. **MVP Definition**: Learning to identify truly essential features under extreme time pressure
-3. **Team Dynamics**: Importance of clear roles and rapid communication in high-pressure environments
+- **Phase 1 (6 months)**: MVP with top 5 ERP integrations, pilot with 50 SMEs
+- **Phase 2 (12 months)**: Supply chain integrations, insurance partnerships, 500+ businesses
+- **Phase 3 (18 months)**: Full Visa integration, international expansion, 10,000+ network
 
-## Gallery
-
-Project artifacts:
-
-![Graph Analysis](/images/projects/visa-disaster-response/visaid-graph.jpg)
-![Alternative Graph View](/images/projects/visa-disaster-response/VISA AID GRAPH.jpeg)
-![Class Diagram](/images/projects/visa-disaster-response/visaid-class-diagram.jpg)
-![UI & Wireframing](/images/projects/visa-disaster-response/visaid-ui-wireframes.jpg)
-![Full Project Overview](/images/projects/visa-disaster-response/VISA AID Full Project.jpeg)
-
-Team moments:
-
-![Presenting](/images/projects/visa-disaster-response/presenting.jpeg)
 ![Team](/images/projects/visa-disaster-response/team.jpeg)
+
+## Video
+
+<div style="position:relative;padding-top:56.25%;">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/LQgqI1CXXf4?rel=0&modestbranding=1&autoplay=0&playsinline=1"
+    title="Vis(AI)D Demo"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:8px;"
+  ></iframe>
+</div>
 
 ## Project Documentation
 
-<MultiPDFViewer 
-  title="Vis(AI)D Project Documentation"
-  description="Comprehensive documentation from LSE Sprint Week competition including final presentation and technical report"
-  documents={[
-    {
-      src: "/Downloads/visa-disaster-response/VISAID-FINAL-Presentation-2025.pdf",
-      title: "Final Presentation",
-      description: "Complete presentation delivered at LSE Sprint Week showcasing Vis(AI)D platform and business model",
-      size: "4.2 MB",
-      type: "presentation"
-    },
-    {
-      src: "/Downloads/visa-disaster-response/VISAID_FINAL.pdf",
-      title: "Technical Report",
-      description: "Detailed technical documentation covering architecture, implementation, and evaluation metrics",
-      size: "3.8 MB",
-      type: "report"
-    }
-  ]}
-/>
+### Vis(AI)D Project Documentation
+*Comprehensive documentation from LSE Sprint Week competition including final presentation and technical report*
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+
+<div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; background: #f9fafb;">
+  <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+    <span style="font-size: 1.5rem;">📊</span>
+    <div>
+      <h4 style="margin: 0; font-weight: 600; color: #111827;">Final Presentation</h4>
+      <p style="margin: 0; font-size: 0.875rem; color: #6b7280;">4.2 MB • presentation</p>
+    </div>
+  </div>
+  <p style="margin: 0 0 1rem 0; color: #4b5563; font-size: 0.875rem;">Complete presentation delivered at LSE Sprint Week showcasing Vis(AI)D platform and business model</p>
+  <div style="display: flex; gap: 0.5rem;">
+    <a href="/Downloads/visa-disaster-response/VISAID-FINAL-Presentation-2025.pdf" target="_blank" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; padding: 0.5rem; background: #f3f4f6; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.75rem; transition: background-color 0.2s;">🔗 Open</a>
+    <a href="/Downloads/visa-disaster-response/VISAID-FINAL-Presentation-2025.pdf" download="VISAID-FINAL-Presentation-2025.pdf" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; padding: 0.5rem; background: #dbeafe; color: #1d4ed8; text-decoration: none; border-radius: 4px; font-size: 0.75rem; transition: background-color 0.2s;">⬇️ Download</a>
+  </div>
+</div>
+
+<div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; background: #f9fafb;">
+  <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+    <span style="font-size: 1.5rem;">📋</span>
+    <div>
+      <h4 style="margin: 0; font-weight: 600; color: #111827;">Technical Report</h4>
+      <p style="margin: 0; font-size: 0.875rem; color: #6b7280;">3.8 MB • report</p>
+    </div>
+  </div>
+  <p style="margin: 0 0 1rem 0; color: #4b5563; font-size: 0.875rem;">Detailed technical documentation covering architecture, implementation, and evaluation metrics</p>
+  <div style="display: flex; gap: 0.5rem;">
+    <a href="/Downloads/visa-disaster-response/VISAID_FINAL.pdf" target="_blank" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; padding: 0.5rem; background: #f3f4f6; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.75rem; transition: background-color 0.2s;">🔗 Open</a>
+    <a href="/Downloads/visa-disaster-response/VISAID_FINAL.pdf" download="VISAID_FINAL.pdf" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; padding: 0.5rem; background: #dbeafe; color: #1d4ed8; text-decoration: none; border-radius: 4px; font-size: 0.75rem; transition: background-color 0.2s;">⬇️ Download</a>
+  </div>
+</div>
+
+</div>
 
 ## Video
 

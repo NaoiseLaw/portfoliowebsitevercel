@@ -43,7 +43,7 @@ An innovative 3D portfolio experience that transforms the traditional resume int
 
 - **Immersive 3D Environment**: California-style office with custom lighting, furniture, and ambient elements
 - **Three AI Personas**: Technical PM, Product Leader, and Innovation Designer variants of myself
-- **Real-time AI Conversations**: Context-aware responses grounded in my actual work experience using Gemini 1.5 Flash
+- **Real-time AI Conversations**: Context-aware responses grounded in my actual work experience using Gemini 2.0 Flash
 - **Smart Context Engine**: Automatically surfaces relevant projects, metrics, and technologies from my portfolio
 - **Persistent Conversations**: LocalStorage + optional Redis integration for cross-session memory
 - **FAQ Analytics**: Tracks most-asked questions to improve responses over time
@@ -60,7 +60,7 @@ An innovative 3D portfolio experience that transforms the traditional resume int
 
 ### Backend (Next.js API Routes)
 - **Route**: `/api/simulator/chat` - Main AI endpoint
-- **Model**: Google Gemini 1.5 Flash (640 token responses, temperature 0.6)
+- **Model**: Google Gemini 2.0 Flash (640 token responses, temperature 0.6)
 - **Context Building**: Pulls from `resume.tsx` (skills, work history) and `projects/*.mdx` (recent projects with tech stacks)
 - **Guardrails**: 
   - Strictly grounded in portfolio context (no hallucinations)

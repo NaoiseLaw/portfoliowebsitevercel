@@ -1,86 +1,73 @@
-# 3D Recruitment Simulator Setup
+# Portfolio Simulator Setup
 
-This document outlines the basic infrastructure setup for the 3D recruitment simulator that has been added to your portfolio.
+## Google AI API Key Setup
 
-## Files Created/Modified
+The 3D Portfolio Simulator uses Google's Gemini AI for intelligent conversations. To enable the full AI functionality:
 
-### New Files:
-- `app.js` - Express server with session middleware
-- `routes/simulator.js` - Simulator routes with chat endpoint
-- `public/simulator/index.html` - Basic HTML with Three.js setup
-- `.env.example` - Environment variables template
+### 1. Get Your Google AI API Key
 
-### Modified Files:
-- `package.json` - Added Express dependencies and server script
-- `src/data/resume.tsx` - Added simulator link to navbar
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Copy the generated API key
 
-## Dependencies Added
+### 2. Add Environment Variable
 
-- `@google/generative-ai` - Google AI integration
-- `express` - Web server framework
-- `express-session` - Session management
-- `@types/express` - TypeScript types for Express
-- `@types/express-session` - TypeScript types for express-session
+Create a `.env.local` file in your project root with:
 
-## Setup Instructions
+```bash
+# Google AI API Key for Portfolio Simulator
+GOOGLE_API_KEY=your_actual_api_key_here
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+# Alternative environment variable name (for flexibility)
+GOOGLE_AI_API_KEY=your_actual_api_key_here
 
-2. **Create environment file:**
-   ```bash
-   cp .env.example .env
-   ```
-   Update the `.env` file with your actual Google AI API key.
-
-3. **Start the Express server:**
-   ```bash
-   npm run server
-   ```
-   The simulator will be available at: http://localhost:3001/simulator
-
-4. **Start Next.js development server (in another terminal):**
-   ```bash
-   npm run dev
-   ```
-   Your portfolio will be available at: http://localhost:3000
-
-## File Structure
-
-```
-portfolio/
-├── app.js                          # Express server
-├── routes/
-│   └── simulator.js                # Simulator routes
-├── public/
-│   └── simulator/
-│       └── index.html              # Simulator HTML page
-├── .env.example                    # Environment variables template
-└── src/
-    └── data/
-        └── resume.tsx              # Updated with simulator link
+# Site URL for production origin checking (optional)
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```
 
-## Next Steps
+### 3. Restart Development Server
 
-1. **Add your Three.js code** to the script section in `public/simulator/index.html`
-2. **Implement Google AI integration** in the `/chat` POST route in `routes/simulator.js`
-3. **Customize the UI** styling in the HTML file as needed
-4. **Add error handling** and validation as required
+After adding the environment variable:
 
-## API Endpoints
+```bash
+npm run dev
+```
 
-- `GET /simulator` - Serves the simulator HTML page
-- `POST /simulator/chat` - Handles chat messages (placeholder for AI integration)
-- `GET /simulator/session` - Returns session information
-- `GET /health` - Health check endpoint
+## Features
 
-## Notes
+### With API Key (Full Functionality)
+- ✅ Real AI conversations using Google Gemini 2.0 Flash
+- ✅ Context-aware responses based on your portfolio data
+- ✅ Persistent conversation history
+- ✅ Multiple AI personas (Technical PM, Product Leader, Innovation Designer)
+- ✅ Rate limiting and security features
 
-- The simulator runs on port 3001 to avoid conflicts with Next.js (port 3000)
-- Session management is configured for basic functionality
-- All routes include proper error handling
-- The HTML includes a responsive design and placeholder UI elements
-- Three.js is loaded via CDN for easy setup
+### Without API Key (Fallback Mode)
+- ✅ Basic 3D environment with floating cubes
+- ✅ Simulated AI responses based on keywords
+- ✅ Chat interface with local storage
+- ❌ No real AI integration
+- ❌ No context-aware responses
+
+## Troubleshooting
+
+### "Server misconfiguration: missing GOOGLE_API_KEY"
+- Make sure you've created `.env.local` with your API key
+- Restart your development server
+- Check that the API key is valid and active
+
+### API Rate Limits
+- The simulator includes built-in rate limiting (10 requests per minute per IP)
+- If you hit limits, wait a minute before trying again
+
+### CORS Issues
+- The API includes origin checking for production
+- Make sure `NEXT_PUBLIC_SITE_URL` matches your domain in production
+
+## Security Notes
+
+- Never commit your `.env.local` file to version control
+- The API key is only used server-side for security
+- Rate limiting prevents abuse
+- Origin checking prevents unauthorized usage in production

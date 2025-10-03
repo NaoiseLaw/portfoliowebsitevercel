@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Portfolio - Meet Naoise Law</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+        }
+        
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            max-width: 300px;
+            z-index: 100;
+        }
+        
+        #dialogue-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            z-index: 200;
+        }
+        
+        #dialogue-box h3 {
+            margin: 0 0 10px 0;
+            color: #2196F3;
+        }
+        
+        #dialogue-content {
+            margin: 10px 0;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .dialogue-option {
+            background: #f0f0f0;
+            border: 2px solid #2196F3;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .dialogue-option:hover {
+            background: #2196F3;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        #custom-question-container {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        
+        #custom-question-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        
+        #custom-question-submit {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        #custom-question-submit:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+        
+        #custom-question-submit:disabled {
+            background: #999;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(33, 150, 243, 0.3);
+            border-radius: 50%;
+            border-top-color: #2196F3;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .response-text {
+            color: #333 !important;
+            font-weight: normal !important;
+            animation: none !important;
+        }
+        
+        .instruction {
+            opacity: 0.8;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        #interaction-prompt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: none;
+            font-size: 14px;
+            z-index: 150;
+        }
+        
+        .floating-text {
+            position: absolute;
+            color: #ff0;
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+            animation: floatUp 2s ease-out forwards;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            z-index: 50;
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-100px); }
+        }
+
+        #back-to-portfolio {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        #back-to-portfolio:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div id="ui-overlay">
+        <h2>Meet Naoise Law</h2>
+        <p style="font-size: 18px;">💼 AI Product Manager</p>
+        <p style="font-size: 13px; margin: 5px 0;">WASD to move smoothly</p>
+        <p style="font-size: 13px; margin: 5px 0;">← → to look around</p>
+        <p style="font-size: 13px; margin: 5px 0;">E to interact</p>
+        <p style="font-size: 13px; margin: 5px 0;">SPACE to dance</p>
+        <p class="instruction">💡 Chat about my experience!</p>
+    </div>
+
+    <button id="back-to-portfolio" onclick="window.parent.location.href='/'">← Back Home</button>
+    
+    <div id="dialogue-box">
+        <h3 id="dialogue-name">Naoise Law</h3>
+        <div id="dialogue-content"></div>
+        <div id="dialogue-options"></div>
+        <div id="custom-question-container">
+            <p style="margin: 5px 0 10px 0; font-size: 13px; opacity: 0.7; text-align: center;">Or ask your own question:</p>
+            <input type="text" id="custom-question-input" placeholder="e.g., 'Tell me about your hackathon win'" maxlength="200">
+            <button id="custom-question-submit">Ask Question</button>
+            <button id="test-response" style="margin-top: 8px; background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px; width: 100%;">Test Response</button>
+        </div>
+    </div>
+    
+    <div id="interaction-prompt"></div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB);
+        scene.fog = new THREE.Fog(0x87CEEB, 10, 50);
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.6, 5);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        // Floating text effect
+        function createFloatingText(text, worldPos) {
+            const screenPos = worldPos.clone();
+            screenPos.project(camera);
+            
+            const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
+            const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
+            
+            const div = document.createElement('div');
+            div.className = 'floating-text';
+            div.textContent = text;
+            div.style.left = x + 'px';
+            div.style.top = y + 'px';
+            document.body.appendChild(div);
+            
+            setTimeout(() => div.remove(), 2000);
+        }
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xFFE5B4, 0.6);
+        directionalLight.position.set(10, 15, 10);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+        
+        // Clean white floor
+        const floorGeometry = new THREE.PlaneGeometry(40, 40);
+        const floorMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xFFFFFF,
+            roughness: 0.7,
+            metalness: 0.1
+        });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+        
+        // Walls
+        const wallMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xF8F8FF,
+            roughness: 0.9
+        });
+        
+        const backWall = new THREE.Mesh(new THREE.PlaneGeometry(40, 10), wallMaterial);
+        backWall.position.set(0, 5, -20);
+        backWall.receiveShadow = true;
+        scene.add(backWall);
+        
+        const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(40, 10), wallMaterial);
+        leftWall.position.set(-20, 5, 0);
+        leftWall.rotation.y = Math.PI / 2;
+        scene.add(leftWall);
+        
+        const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(40, 10), wallMaterial);
+        rightWall.position.set(20, 5, 0);
+        rightWall.rotation.y = -Math.PI / 2;
+        scene.add(rightWall);
+        
+        // Windows
+        const windowMaterial = new THREE.MeshStandardMaterial({
+            color: 0x87ceeb,
+            transparent: true,
+            opacity: 0.3
+        });
+        
+        for (let x = -15; x <= 15; x += 10) {
+            const window = new THREE.Mesh(new THREE.PlaneGeometry(4, 3), windowMaterial);
+            window.position.set(x, 5, -19.9);
+            scene.add(window);
+        }
+        
+        // Furniture
+        const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x8b6914 });
+        const metalMaterial = new THREE.MeshStandardMaterial({ color: 0x404040 });
+        
+        function createDesk(x, z) {
+            const group = new THREE.Group();
+            const desk = new THREE.Mesh(new THREE.BoxGeometry(3, 0.1, 1.5), woodMaterial);
+            desk.position.y = 0.75;
+            desk.castShadow = true;
+            group.add(desk);
+            
+            const monitor = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.7, 0.05), new THREE.MeshStandardMaterial({ color: 0x000000 }));
+            monitor.position.set(0, 1.3, 0);
+            group.add(monitor);
+            
+            const chair = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.05, 0.5), new THREE.MeshStandardMaterial({ color: 0x333333 }));
+            chair.position.set(0, 0.5, 0.8);
+            group.add(chair);
+            
+            group.position.set(x, 0, z);
+            return group;
+        }
+        
+        scene.add(createDesk(-10, -10));
+        scene.add(createDesk(0, -10));
+        scene.add(createDesk(10, -10));
+        
+        // Characters
+        const characters = [];
+        let conversationHistory = []; // Store conversation history
+        
+        function createCharacter(name, role, x, z, color) {
+            const group = new THREE.Group();
+            
+            const torso = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.25, 0.3, 0.8, 8),
+                new THREE.MeshStandardMaterial({ color })
+            );
+            torso.position.y = 0.6;
+            torso.castShadow = true;
+            group.add(torso);
+            
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(0.25, 8, 6),
+                new THREE.MeshStandardMaterial({ color: 0xffdbac })
+            );
+            head.position.y = 1.25;
+            head.castShadow = true;
+            group.add(head);
+            
+            // Label
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.fillRect(0, 0, 256, 64);
+            ctx.fillStyle = 'black';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(name, 128, 25);
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#666';
+            ctx.fillText(role, 128, 45);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture }));
+            label.position.y = 1.8;
+            label.scale.set(2, 0.5, 1);
+            group.add(label);
+            
+            group.position.set(x, 0, z);
+            group.userData = {
+                name,
+                role,
+                conversations: [],
+                initialPosition: new THREE.Vector3(x, 0, z),
+                targetPosition: new THREE.Vector3(x, 0, z),
+                moveTimer: 0,
+                isDancing: false
+            };
+            
+            characters.push(group);
+            return group;
+        }
+        
+        const tech = createCharacter('Naoise Law', 'AI Product Manager - Technical', -10, -5, 0x4169e1);
+        const lead = createCharacter('Naoise Law', 'Product Leader', 0, -5, 0x228b22);
+        const creative = createCharacter('Naoise Law', 'Innovation Designer', 10, -5, 0xff6347);
+        scene.add(tech, lead, creative);
+        
+        // Player
+        const player = {
+            position: new THREE.Vector3(0, 1.6, 5),
+            velocity: new THREE.Vector3(0, 0, 0),
+            speed: 0.08,
+            acceleration: 0.02,
+            friction: 0.9,
+            isDancing: false
+        };
+        
+        const keys = {};
+        let mouseX = 0;
+        let currentCharacter = null;
+        let nearbyCharacter = null;
+        let lookSpeed = 0.02;
+        let lookAcceleration = 0.001;
+        let currentLookSpeed = 0;
+        
+        // Controls
+        document.addEventListener('keydown', (e) => {
+            if (document.activeElement === document.getElementById('custom-question-input')) {
+                if (e.key === 'Escape') {
+                    document.getElementById('dialogue-box').style.display = 'none';
+                    currentCharacter = null;
+                }
+                return;
+            }
+            
+            keys[e.key.toLowerCase()] = true;
+            
+            if (e.key.toLowerCase() === 'e' && nearbyCharacter && !currentCharacter) {
+                e.preventDefault();
+                openDialogue(nearbyCharacter);
+            }
+            
+            if (e.key === ' ') {
+                e.preventDefault();
+                player.isDancing = true;
+                createFloatingText('💃', player.position);
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            if (document.activeElement === document.getElementById('custom-question-input')) return;
+            keys[e.key.toLowerCase()] = false;
+            if (e.key === ' ') player.isDancing = false;
+        });
+        
+        // Character movement
+        function updateCharacter(char, dt) {
+            if (char === currentCharacter || char.userData.isDancing) {
+                if (char === currentCharacter) {
+                    const look = new THREE.Vector3(player.position.x, char.position.y, player.position.z);
+                    char.lookAt(look);
+                    char.rotation.x = 0;
+                    char.rotation.z = 0;
+                }
+                return;
+            }
+            
+            if (Math.random() < 0.001) {
+                char.userData.isDancing = true;
+                createFloatingText('🎵', char.position);
+                setTimeout(() => { char.userData.isDancing = false; }, 3000);
+            }
+            
+            char.userData.moveTimer -= dt;
+            if (char.userData.moveTimer <= 0) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 3 + Math.random() * 5;
+                char.userData.targetPosition.set(
+                    char.userData.initialPosition.x + Math.cos(angle) * dist,
+                    0,
+                    char.userData.initialPosition.z + Math.sin(angle) * dist
+                );
+                char.userData.targetPosition.x = Math.max(-18, Math.min(18, char.userData.targetPosition.x));
+                char.userData.targetPosition.z = Math.max(-18, Math.min(18, char.userData.targetPosition.z));
+                char.userData.moveTimer = 5 + Math.random() * 5;
+            }
+            
+            const dir = new THREE.Vector3().subVectors(char.userData.targetPosition, char.position);
+            dir.y = 0;
+            if (dir.length() > 0.1) {
+                dir.normalize();
+                char.position.add(dir.multiplyScalar(0.02));
+                char.lookAt(char.userData.targetPosition);
+                char.rotation.x = 0;
+                char.rotation.z = 0;
+                char.position.y = Math.abs(Math.sin(Date.now() * 0.005)) * 0.05;
+            }
+        }
+        
+        // Dialogue
+        const questionSets = {
+            'Technical': [
+                "Tell me about your AI and ML experience",
+                "How did you achieve 94% accuracy?",
+                "What's your Python experience?",
+                "Tell me about the $1.5B automation",
+                "What technical challenges excite you?"
+            ],
+            'Leader': [
+                "Tell me about your leadership experience",
+                "How do you manage stakeholders?",
+                "What's your approach to team building?",
+                "How did you coordinate $1.5B operations?",
+                "Tell me about a challenging project"
+            ],
+            'Designer': [
+                "What's your product discovery process?",
+                "Tell me about user research",
+                "How do you approach innovation?",
+                "What's your design thinking process?",
+                "Tell me about the government-adopted system"
+            ]
+        };
+        
+        function openDialogue(char) {
+            currentCharacter = char;
+            conversationHistory = []; // Clear conversation history for new character
+            
+            document.getElementById('dialogue-box').style.display = 'block';
+            document.getElementById('dialogue-name').textContent = char.userData.name;
+            
+            const greeting = char.userData.role.includes('Technical') 
+                ? "Hi! I'm excited to discuss my AI and automation experience. I recently won LSE's hackathon building an ML platform with 94% accuracy. What would you like to know?"
+                : char.userData.role.includes('Leader')
+                ? "Hello! I've managed $1.5B in operations and led teams of 20+ people. I'd love to discuss how I can contribute to your team's success."
+                : "Hi! I'm passionate about user-centered design and innovation. My research and product work focuses on solving real user problems. What challenges are you facing?";
+            
+            document.getElementById('dialogue-content').innerHTML = `<p><strong>${char.userData.name}:</strong> ${greeting}</p>`;
+            
+            // Add greeting to conversation history
+            conversationHistory.push({
+                user: "System greeting",
+                ai: greeting
+            });
+            
+            const type = char.userData.role.includes('Technical') ? 'Technical' : char.userData.role.includes('Leader') ? 'Leader' : 'Designer';
+            const questions = questionSets[type];
+            const shuffled = questions.sort(() => Math.random() - 0.5);
+            
+            const opts = document.getElementById('dialogue-options');
+            opts.innerHTML = '';
+            shuffled.slice(0, 3).forEach(q => {
+                const opt = document.createElement('div');
+                opt.className = 'dialogue-option';
+                opt.textContent = q;
+                opt.onclick = () => selectOption(q);
+                opts.appendChild(opt);
+            });
+            
+            setTimeout(() => document.getElementById('custom-question-input').focus(), 100);
+        }
+        
+        async function selectOption(question) {
+            if (!currentCharacter) return;
+            
+            const content = document.getElementById('dialogue-content');
+            
+            // Clear input field if it matches the question
+            const input = document.getElementById('custom-question-input');
+            if (input.value.trim() === question) {
+                input.value = '';
+            }
+            
+            content.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
+            content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> <span class="loading">Thinking...</span></p>`;
+            content.scrollTop = content.scrollHeight;
+            
+            document.getElementById('dialogue-options').style.pointerEvents = 'none';
+            document.getElementById('custom-question-input').disabled = true;
+            document.getElementById('custom-question-submit').disabled = true;
+            
+            try {
+                const res = await fetch('/api/simulator/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: question,
+                        sessionId: 'simulator-session-' + Date.now(),
+                        history: conversationHistory,
+                        persona: {
+                            name: currentCharacter.userData.name,
+                            role: currentCharacter.userData.role,
+                            personality: currentCharacter.userData.role.includes('Technical') ? 'Technical and detail-oriented' 
+                                : currentCharacter.userData.role.includes('Leader') ? 'Leadership-focused and strategic' 
+                                : 'Creative and user-centered',
+                            quirk: 'Passionate about solving real problems'
+                        }
+                    })
+                });
+                
+                const data = await res.json();
+                const responseText = data.message || "Great question! I'd love to discuss this further.";
+                
+                // Add to conversation history
+                conversationHistory.push({
+                    user: question,
+                    ai: responseText
+                });
+                
+                // Keep only last 10 exchanges to avoid token limits
+                if (conversationHistory.length > 10) {
+                    conversationHistory = conversationHistory.slice(-10);
+                }
+                
+                // More robust text replacement
+                const loadingSpan = content.querySelector('.loading');
+                if (loadingSpan) {
+                    loadingSpan.textContent = responseText;
+                    loadingSpan.className = 'response-text';
+                } else {
+                    // Fallback: append response directly
+                    content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> ${responseText}</p>`;
+                }
+                content.scrollTop = content.scrollHeight;
+                
+                if (Math.random() < 0.3) createFloatingText('💡', currentCharacter.position);
+                
+            } catch (error) {
+                console.error('Chat error:', error);
+                content.innerHTML = content.innerHTML.replace('<span class="loading"></span>', 
+                    "I'm having trouble with that question. Could you try another one?");
+            }
+            
+            document.getElementById('dialogue-options').style.pointerEvents = 'auto';
+            document.getElementById('custom-question-input').disabled = false;
+            document.getElementById('custom-question-submit').disabled = false;
+            document.getElementById('custom-question-input').value = '';
+            
+            openDialogue(currentCharacter);
+        }
+        
+        document.getElementById('custom-question-submit').addEventListener('click', () => {
+            const q = document.getElementById('custom-question-input').value.trim();
+            if (q && currentCharacter) {
+                // Add user question to dialogue
+                const content = document.getElementById('dialogue-content');
+                content.innerHTML += `<p><strong>You:</strong> ${q}</p>`;
+                content.scrollTop = content.scrollHeight;
+                
+                selectOption(q);
+            }
+        });
+        
+        document.getElementById('custom-question-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const q = e.target.value.trim();
+                if (q && currentCharacter) {
+                    // Add user question to dialogue
+                    const content = document.getElementById('dialogue-content');
+                    content.innerHTML += `<p><strong>You:</strong> ${q}</p>`;
+                    content.scrollTop = content.scrollHeight;
+                    
+                    selectOption(q);
+                }
+            }
+        });
+        
+        // Test button to verify response display
+        document.getElementById('test-response').addEventListener('click', () => {
+            if (currentCharacter) {
+                const content = document.getElementById('dialogue-content');
+                content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> This is a test response to verify the dialogue system is working correctly!</p>`;
+                content.scrollTop = content.scrollHeight;
+                console.log('Test response added to dialogue');
+            }
+        });
+        
+        // Animation
+        let lastTime = 0;
+        function animate(time) {
+            requestAnimationFrame(animate);
+            const dt = (time - lastTime) / 1000;
+            lastTime = time;
+            
+            // Smooth player movement with acceleration
+            if (!player.isDancing && !currentCharacter) {
+                const targetVelocity = new THREE.Vector3(0, 0, 0);
+                
+                if (keys['w']) targetVelocity.z = player.speed;
+                if (keys['s']) targetVelocity.z = -player.speed;
+                if (keys['a']) targetVelocity.x = -player.speed;
+                if (keys['d']) targetVelocity.x = player.speed;
+                
+                // Smooth acceleration towards target velocity
+                player.velocity.lerp(targetVelocity, player.acceleration);
+                
+                // Apply friction when no keys are pressed
+                if (!keys['w'] && !keys['s'] && !keys['a'] && !keys['d']) {
+                    player.velocity.multiplyScalar(player.friction);
+                    if (player.velocity.length() < 0.001) player.velocity.set(0, 0, 0);
+                }
+            } else {
+                // Stop immediately when dancing or in dialogue
+                player.velocity.multiplyScalar(0.8);
+            }
+            
+            const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+            forward.y = 0;
+            forward.normalize();
+            const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion);
+            right.y = 0;
+            right.normalize();
+            
+            player.position.add(forward.multiplyScalar(player.velocity.z));
+            player.position.add(right.multiplyScalar(player.velocity.x));
+            player.position.x = Math.max(-18, Math.min(18, player.position.x));
+            player.position.z = Math.max(-18, Math.min(18, player.position.z));
+            
+            // Smooth arrow key looking
+            if (keys['arrowleft']) {
+                currentLookSpeed = Math.max(-lookSpeed, currentLookSpeed - lookAcceleration);
+            } else if (keys['arrowright']) {
+                currentLookSpeed = Math.min(lookSpeed, currentLookSpeed + lookAcceleration);
+            } else {
+                // Gradual deceleration when no keys are pressed
+                currentLookSpeed *= 0.9;
+                if (Math.abs(currentLookSpeed) < 0.001) currentLookSpeed = 0;
+            }
+            
+            mouseX += currentLookSpeed;
+            
+            // Add subtle camera bob when moving
+            const isMoving = player.velocity.length() > 0.01;
+            const bobOffset = isMoving ? Math.sin(time * 0.01) * 0.02 : 0;
+            
+            camera.position.copy(player.position);
+            camera.position.y += bobOffset;
+            camera.rotation.y = mouseX;
+            
+            characters.forEach(c => updateCharacter(c, dt));
+            
+            // Check nearby
+            nearbyCharacter = null;
+            let minDist = Infinity;
+            characters.forEach(c => {
+                const d = player.position.distanceTo(c.position);
+                if (d < 3 && d < minDist) {
+                    minDist = d;
+                    nearbyCharacter = c;
+                }
+            });
+            
+            const prompt = document.getElementById('interaction-prompt');
+            if (nearbyCharacter && !currentCharacter) {
+                prompt.style.display = 'block';
+                prompt.textContent = `Press E to talk to ${nearbyCharacter.userData.name}`;
+            } else {
+                prompt.style.display = 'none';
+            }
+            
+            renderer.render(scene, camera);
+        }
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Mouse controls removed - using arrow keys instead
+        
+        // Prevent navigation issues
+        window.addEventListener('beforeunload', (e) => {
+            // Allow normal navigation but prevent accidental redirects
+        });
+        
+        // Prevent iframe navigation issues
+        if (window.parent !== window) {
+            // We're in an iframe, prevent certain navigation
+            document.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target.tagName === 'A' && target.href) {
+                    // Handle links safely within iframe context
+                    if (target.href.includes('/') && !target.href.includes('simulator')) {
+                        e.preventDefault();
+                        window.parent.location.href = target.href;
+                    }
+                }
+            });
+        }
+        
+        animate(0);
+    </script>
+</body>
+</html>

@@ -133,7 +133,7 @@ export default function PDFViewer({
                 PDF Preview Not Available
               </h4>
               <p className="text-gray-600 mb-4">
-                Your browser doesn't support PDF preview. Download or open in a new tab to view.
+                Your browser doesn&apos;t support PDF preview. Download or open in a new tab to view.
               </p>
               <div className="flex gap-2 justify-center">
                 <button
