@@ -5,12 +5,21 @@ import { ProjectLayout } from "@/components/project-layout";
 import { getProjectPosts } from "@/data/projects";
 
 export async function generateStaticParams() {
-  const projects = DATA.projects || [];
-  return projects.filter((p: any) => p.slug).map((p: any) => ({ slug: p.slug }));
+  const allProjects = [
+    ...(DATA.projects || []),
+    ...(DATA.consultingProjects || []),
+    ...(DATA.otherProjects || [])
+  ];
+  return allProjects.filter((p: any) => p.slug).map((p: any) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const project = (DATA.projects as readonly any[]).find((p) => p.slug === params.slug);
+  const allProjects = [
+    ...(DATA.projects || []),
+    ...(DATA.consultingProjects || []),
+    ...(DATA.otherProjects || [])
+  ];
+  const project = allProjects.find((p) => p.slug === params.slug);
   if (!project) return {};
   return {
     title: project.title,
@@ -25,12 +34,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const projects = DATA.projects as readonly any[];
-  const idx = projects.findIndex((p) => p.slug === params.slug);
+  const allProjects = [
+    ...(DATA.projects || []),
+    ...(DATA.consultingProjects || []),
+    ...(DATA.otherProjects || [])
+  ];
+  const idx = allProjects.findIndex((p) => p.slug === params.slug);
   if (idx === -1) notFound();
-  const project = projects[idx];
-  const prev = idx > 0 ? { title: projects[idx - 1].title, href: projects[idx - 1].href } : null;
-  const next = idx < projects.length - 1 ? { title: projects[idx + 1].title, href: projects[idx + 1].href } : null;
+  const project = allProjects[idx];
+  const prev = idx > 0 ? { title: allProjects[idx - 1].title, href: allProjects[idx - 1].href } : null;
+  const next = idx < allProjects.length - 1 ? { title: allProjects[idx + 1].title, href: allProjects[idx + 1].href } : null;
 
   return (
     <section className="max-w-3xl mx-auto px-4 py-10">

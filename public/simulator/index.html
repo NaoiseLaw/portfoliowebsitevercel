@@ -616,8 +616,11 @@
                 // More robust text replacement
                 const loadingSpan = content.querySelector('.loading');
                 if (loadingSpan) {
-                    loadingSpan.textContent = responseText;
-                    loadingSpan.className = 'response-text';
+                    // Replace the loading span with the actual response
+                    const responseElement = document.createElement('span');
+                    responseElement.className = 'response-text';
+                    responseElement.textContent = responseText;
+                    loadingSpan.parentNode.replaceChild(responseElement, loadingSpan);
                 } else {
                     // Fallback: append response directly
                     content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> ${responseText}</p>`;
