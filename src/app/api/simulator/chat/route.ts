@@ -211,14 +211,27 @@ ${projectsContext}
     const text = result?.response?.text?.() || "I'm not fully sure from the available context—could you share a bit more?";
     
     console.log("💬 Generated response:", text.substring(0, 200) + "...");
+    console.log("📏 Response length:", text.length);
+    console.log("🔍 Response type:", typeof text);
 
     // Persist this turn and update FAQ stats
     try {
       await appendChat(personaKey, trimmed, text);
       await incrementFaq(trimmed);
-    } catch {}
+    } catch (error) {
+      console.error("❌ Error persisting chat:", error);
+    }
 
-    return NextResponse.json({ message: text, sessionId: sessionId || null });
+    const responseData = { 
+      message: text, 
+      sessionId: sessionId || null,
+      timestamp: new Date().toISOString(),
+      responseLength: text.length
+    };
+    
+    console.log("📤 Sending response:", responseData);
+    
+    return NextResponse.json(responseData);
   } catch (err: any) {
     console.error("❌ Simulator chat error:", err);
     console.error("Error details:", JSON.stringify(err, null, 2));

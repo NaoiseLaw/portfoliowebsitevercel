@@ -523,6 +523,26 @@
             ]
         };
         
+        // Refresh question options without clearing conversation history
+        function refreshQuestionOptions(char) {
+            if (!char) return;
+            
+            const type = char.userData.role.includes('Technical') ? 'Technical' 
+                : char.userData.role.includes('Leader') ? 'Leader' : 'Designer';
+            const questions = questionSets[type];
+            const shuffled = questions.sort(() => Math.random() - 0.5);
+            
+            const opts = document.getElementById('dialogue-options');
+            opts.innerHTML = '';
+            shuffled.slice(0, 3).forEach(q => {
+                const opt = document.createElement('div');
+                opt.className = 'dialogue-option';
+                opt.textContent = q;
+                opt.onclick = () => selectOption(q);
+                opts.appendChild(opt);
+            });
+        }
+        
         function openDialogue(char) {
             currentCharacter = char;
             conversationHistory = []; // Clear conversation history for new character
@@ -564,7 +584,11 @@
         async function selectOption(question) {
             if (!currentCharacter) return;
             
+            console.log('🚀 selectOption called with question:', question);
+            console.log('👤 Current character:', currentCharacter.userData.name);
+            
             const content = document.getElementById('dialogue-content');
+            console.log('📝 Content element:', content);
             
             // Clear input field if it matches the question
             const input = document.getElementById('custom-question-input');
@@ -572,35 +596,55 @@
                 input.value = '';
             }
             
+            // Add user question
             content.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
-            content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> <span class="loading">Thinking...</span></p>`;
+            
+            // Add loading message with unique ID for easier targeting
+            const loadingId = 'loading-' + Date.now();
+            content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> <span id="${loadingId}" class="loading">Thinking...</span></p>`;
             content.scrollTop = content.scrollHeight;
+            
+            console.log('⏳ Added loading message with ID:', loadingId);
             
             document.getElementById('dialogue-options').style.pointerEvents = 'none';
             document.getElementById('custom-question-input').disabled = true;
             document.getElementById('custom-question-submit').disabled = true;
             
             try {
+                console.log('📡 Making API request to /api/simulator/chat');
+                const requestBody = {
+                    message: question,
+                    sessionId: 'simulator-session-' + Date.now(),
+                    history: conversationHistory,
+                    persona: {
+                        name: currentCharacter.userData.name,
+                        role: currentCharacter.userData.role,
+                        personality: currentCharacter.userData.role.includes('Technical') ? 'Technical and detail-oriented' 
+                            : currentCharacter.userData.role.includes('Leader') ? 'Leadership-focused and strategic' 
+                            : 'Creative and user-centered',
+                        quirk: 'Passionate about solving real problems'
+                    }
+                };
+                console.log('📤 Request body:', requestBody);
+                
                 const res = await fetch('/api/simulator/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: question,
-                        sessionId: 'simulator-session-' + Date.now(),
-                        history: conversationHistory,
-                        persona: {
-                            name: currentCharacter.userData.name,
-                            role: currentCharacter.userData.role,
-                            personality: currentCharacter.userData.role.includes('Technical') ? 'Technical and detail-oriented' 
-                                : currentCharacter.userData.role.includes('Leader') ? 'Leadership-focused and strategic' 
-                                : 'Creative and user-centered',
-                            quirk: 'Passionate about solving real problems'
-                        }
-                    })
+                    body: JSON.stringify(requestBody)
                 });
                 
+                console.log('📡 API Response status:', res.status);
+                console.log('📡 API Response headers:', res.headers);
+                
+                if (!res.ok) {
+                    throw new Error(`API request failed with status ${res.status}`);
+                }
+                
                 const data = await res.json();
-                const responseText = data.message || "Great question! I'd love to discuss this further.";
+                console.log('📥 API Response data:', data);
+                
+                const responseText = data.message || data.error || "Great question! I'd love to discuss this further.";
+                console.log('💬 Extracted response text:', responseText);
                 
                 // Add to conversation history
                 conversationHistory.push({
@@ -613,44 +657,66 @@
                     conversationHistory = conversationHistory.slice(-10);
                 }
                 
-                // More robust text replacement
-                const loadingSpan = content.querySelector('.loading');
-                if (loadingSpan) {
-                    // Replace the loading span with the actual response
-                    const responseElement = document.createElement('span');
-                    responseElement.className = 'response-text';
-                    responseElement.textContent = responseText;
-                    loadingSpan.parentNode.replaceChild(responseElement, loadingSpan);
+                // Enhanced response replacement with multiple fallback strategies
+                console.log('🔄 Attempting to replace loading message...');
+                
+                // Strategy 1: Replace by ID (most reliable)
+                const loadingElement = document.getElementById(loadingId);
+                if (loadingElement) {
+                    console.log('✅ Found loading element by ID, replacing...');
+                    loadingElement.textContent = responseText;
+                    loadingElement.className = 'response-text';
+                    loadingElement.id = ''; // Remove the ID
                 } else {
-                    // Fallback: append response directly
-                    content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> ${responseText}</p>`;
+                    console.log('❌ Loading element not found by ID, trying class selector...');
+                    
+                    // Strategy 2: Replace by class
+                    const loadingSpan = content.querySelector('.loading');
+                    if (loadingSpan) {
+                        console.log('✅ Found loading element by class, replacing...');
+                        loadingSpan.textContent = responseText;
+                        loadingSpan.className = 'response-text';
+                    } else {
+                        console.log('❌ Loading element not found by class, using fallback...');
+                        
+                        // Strategy 3: Fallback - append new response
+                        content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> ${responseText}</p>`;
+                    }
                 }
+                
                 content.scrollTop = content.scrollHeight;
+                console.log('✅ Response replacement completed');
                 
                 if (Math.random() < 0.3) createFloatingText('💡', currentCharacter.position);
                 
             } catch (error) {
-                console.error('Chat error:', error);
-                content.innerHTML = content.innerHTML.replace('<span class="loading"></span>', 
-                    "I'm having trouble with that question. Could you try another one?");
+                console.error('❌ Chat error:', error);
+                console.error('❌ Error details:', error.message);
+                console.error('❌ Error stack:', error.stack);
+                
+                // Enhanced error handling
+                const loadingElement = document.getElementById(loadingId);
+                if (loadingElement) {
+                    loadingElement.textContent = "I'm having trouble with that question. Could you try another one?";
+                    loadingElement.className = 'response-text';
+                } else {
+                    content.innerHTML += `<p><strong>${currentCharacter.userData.name}:</strong> I'm having trouble with that question. Could you try another one?</p>`;
+                }
             }
             
+            // Re-enable controls
             document.getElementById('dialogue-options').style.pointerEvents = 'auto';
             document.getElementById('custom-question-input').disabled = false;
             document.getElementById('custom-question-submit').disabled = false;
             document.getElementById('custom-question-input').value = '';
             
-            openDialogue(currentCharacter);
+            console.log('🔄 Refreshing question options...');
+            refreshQuestionOptions(currentCharacter);
         }
         
         document.getElementById('custom-question-submit').addEventListener('click', () => {
             const q = document.getElementById('custom-question-input').value.trim();
             if (q && currentCharacter) {
-                // Add user question to dialogue
-                const content = document.getElementById('dialogue-content');
-                content.innerHTML += `<p><strong>You:</strong> ${q}</p>`;
-                content.scrollTop = content.scrollHeight;
-                
                 selectOption(q);
             }
         });
@@ -659,11 +725,6 @@
             if (e.key === 'Enter') {
                 const q = e.target.value.trim();
                 if (q && currentCharacter) {
-                    // Add user question to dialogue
-                    const content = document.getElementById('dialogue-content');
-                    content.innerHTML += `<p><strong>You:</strong> ${q}</p>`;
-                    content.scrollTop = content.scrollHeight;
-                    
                     selectOption(q);
                 }
             }
@@ -678,6 +739,43 @@
                 console.log('Test response added to dialogue');
             }
         });
+        
+        // Enhanced API test function
+        window.testAPI = async function() {
+            console.log('🧪 Testing API directly...');
+            try {
+                const res = await fetch('/api/simulator/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: 'Test message from debug function',
+                        sessionId: 'test-session-' + Date.now(),
+                        history: [],
+                        persona: {
+                            name: 'Naoise Law',
+                            role: 'AI Product Manager - Technical',
+                            personality: 'Technical and detail-oriented',
+                            quirk: 'Passionate about solving real problems'
+                        }
+                    })
+                });
+                
+                console.log('📡 API Response status:', res.status);
+                const data = await res.json();
+                console.log('📥 API Response data:', data);
+                
+                if (data.message) {
+                    console.log('✅ API is working! Response:', data.message);
+                    alert('API Test Success! Check console for details.');
+                } else {
+                    console.log('❌ API response missing message field');
+                    alert('API Test Failed! Check console for details.');
+                }
+            } catch (error) {
+                console.error('❌ API Test Error:', error);
+                alert('API Test Error! Check console for details.');
+            }
+        };
         
         // Animation
         let lastTime = 0;

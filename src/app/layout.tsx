@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar";
 import DropdownNav from "@/components/dropdown-nav";
+import ChatWidget from "@/components/chat-widget";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
@@ -76,6 +77,7 @@ export default function RootLayout({
               {children}
             </main>
             <Navbar />
+            <ChatWidget />
           </TooltipProvider>
           <SpeedInsights />
         </ThemeProvider>
