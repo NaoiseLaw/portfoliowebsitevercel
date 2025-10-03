@@ -84,8 +84,15 @@ export default function ChatWidget({ className = '' }: ChatWidgetProps) {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'API request failed');
+        let errorMessage = 'API request failed';
+        try {
+          const error = await response.json();
+          errorMessage = error.error || errorMessage;
+        } catch (parseError) {
+          console.error('Error parsing error response:', parseError);
+          errorMessage = `Server error (${response.status})`;
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -170,7 +177,7 @@ export default function ChatWidget({ className = '' }: ChatWidgetProps) {
       {/* Floating Button */}
       <button
         onClick={toggleChat}
-        className={`w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 animate-pulse ${
+        className={`w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 ${
           isOpen ? 'hidden' : 'block'
         }`}
         aria-label="Open chat"

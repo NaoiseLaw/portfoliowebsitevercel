@@ -133,7 +133,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { message, sessionId, history = [] } = await req.json();
+    let requestBody;
+    try {
+      requestBody = await req.json();
+    } catch (jsonError) {
+      console.error('JSON parsing error:', jsonError);
+      return NextResponse.json(
+        { error: "Invalid JSON format", code: "INVALID_JSON" },
+        { status: 400 }
+      );
+    }
+
+    const { message, sessionId, history = [] } = requestBody;
     
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.ip || "unknown";
     if (isRateLimited(ip)) {
@@ -239,7 +250,7 @@ ${projectsContext}`;
         role: 'model',
         parts: [{ text: 'Understood. I will represent Naoise Law professionally and accurately based on the context provided.' }]
       },
-      ...history.map(msg => ({
+      ...history.map((msg: { role: string; content: string }) => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }]
       }))
@@ -254,9 +265,18 @@ ${projectsContext}`;
     });
 
     // Send message
-    const result = await chat.sendMessage(message);
-    const response = await result.response;
-    const responseText = response.text();
+    let result, response, responseText;
+    try {
+      result = await chat.sendMessage(message);
+      response = await result.response;
+      responseText = response.text();
+    } catch (geminiError) {
+      console.error('Gemini API error:', geminiError);
+      return NextResponse.json(
+        { error: "AI service temporarily unavailable", code: "AI_SERVICE_ERROR" },
+        { status: 503 }
+      );
+    }
 
     // Save to session
     session.messages.push(
