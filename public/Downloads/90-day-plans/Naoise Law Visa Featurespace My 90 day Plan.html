@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90-Day Plan: Product Owner at Visa/Featurespace - Naoise Law</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #1a1f36;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 40px;
+            position: relative;
+        }
+        
+        .visa-badge {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            background: white;
+            color: #1a365d;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .executive-summary {
+            background: linear-gradient(135deg, #f6f9fc 0%, #e9f3ff 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border-left: 5px solid #1a365d;
+        }
+        
+        .timeline-overview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .timeline-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .timeline-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-card h3 {
+            color: #2c5282;
+            margin-bottom: 10px;
+        }
+        
+        .month-section {
+            margin: 40px 0;
+        }
+        
+        .month-header {
+            background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px 10px 0 0;
+            font-size: 1.8em;
+        }
+        
+        .week-container {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            padding: 30px;
+        }
+        
+        .week-block {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+        
+        .week-title {
+            color: #2c5282;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        
+        .deliverable {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .deliverable strong {
+            color: #d68910;
+        }
+        
+        .metric-box {
+            background: #e8f8f5;
+            border: 2px solid #16a085;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .metric-box strong {
+            color: #16a085;
+        }
+        
+        .risk-section {
+            background: #ffe5e5;
+            border: 2px solid #ff6b6b;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+        
+        .risk-item {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        
+        .success-criteria {
+            background: #e6ffe6;
+            border: 2px solid #4caf50;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+        
+        .integration-focus {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 2px solid #ff9800;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .tech-item {
+            background: #2c5282;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .highlight {
+            background: #fff59d;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .persona-card {
+            background: #f0f4f8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #5e72e4;
+        }
+        
+        .footer-section {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #1a365d;
+            padding: 15px 40px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="visa-badge">VISA Sprint Finalist</div>
+            <h1>90-Day Strategic Plan: Product Owner</h1>
+            <div class="subtitle">Bridging Visa's Scale with Featurespace's Innovation Post-Acquisition</div>
+            <div style="margin-top: 20px; opacity: 0.9;">
+                <strong>Prepared by:</strong> Naoise Law | Former VISA Sprint Finalist | Fraud Detection Experience
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="executive-summary">
+                <h2 style="color: #1a365d; margin-bottom: 15px;">Executive Summary</h2>
+                <p><strong>Context:</strong> Visa completed the acquisition of Featurespace in December 2024, integrating ARIC Risk Hub's AI-native fraud detection into Visa's Risk and Identity Solutions unit. With 259 billion transactions annually and $24B+ in check fraud losses alone, the integration represents a critical evolution in fraud prevention.</p>
+                
+                <p style="margin-top: 15px;"><strong>My Unique Value:</strong> As a VISA Sprint Finalist who built Vis(AI)D for SME protection, I understand Visa's innovation priorities. Combined with my Bank of Ireland fraud pattern detection experience and technical skills demonstrated through winning hackathons, I bring the rare combination of understanding fraud from both sides - detecting it manually and building systems to prevent it.</p>
+                
+                <p style="margin-top: 15px;"><strong>90-Day Mission:</strong> Accelerate ARIC platform integration while maintaining Featurespace's innovation velocity, focusing on three pillars: <span class="highlight">Integration Excellence</span>, <span class="highlight">Product Velocity</span>, and <span class="highlight">Customer Success</span>.</p>
+            </div>
+            
+            <div class="timeline-overview">
+                <div class="timeline-card">
+                    <h3>Month 1: Deep Dive & Discovery</h3>
+                    <p><strong>Focus:</strong> Master ARIC Platform</p>
+                    <p>Understand integration challenges, map stakeholder landscape, identify quick wins</p>
+                    <p style="color: #2c5282; margin-top: 10px;"><strong>Key Outcome:</strong> Integration Roadmap</p>
+                </div>
+                <div class="timeline-card">
+                    <h3>Month 2: Accelerate & Integrate</h3>
+                    <p><strong>Focus:</strong> Ship First Features</p>
+                    <p>Launch MVP integrations, optimize team velocity, reduce false positives</p>
+                    <p style="color: #2c5282; margin-top: 10px;"><strong>Key Outcome:</strong> 15% Performance Gain</p>
+                </div>
+                <div class="timeline-card">
+                    <h3>Month 3: Scale & Own</h3>
+                    <p><strong>Focus:</strong> Drive Strategic Initiative</p>
+                    <p>Own major feature release, establish metrics framework, present to leadership</p>
+                    <p style="color: #2c5282; margin-top: 10px;"><strong>Key Outcome:</strong> Q2 Strategy Approved</p>
+                </div>
+            </div>
+            
+            <div class="month-section">
+                <div class="month-header">Month 1: Foundation & Discovery (Days 1-30)</div>
+                <div class="week-container">
+                    
+                    <div class="week-block">
+                        <div class="week-title">Week 1-2: ARIC Platform Mastery & Integration Assessment</div>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Technical Deep Dive into ARIC Risk Hub</h4>
+                        <ul>
+                            <li><strong>Adaptive Behavioral Analytics:</strong> Shadow engineering team to understand how ARIC profiles 100 billion payment events annually</li>
+                            <li><strong>Automated Deep Behavioral Networks:</strong> Map the ML models detecting fraud patterns - similar to my Bank of Ireland mortgage fraud detection</li>
+                            <li><strong>Real-time Processing:</strong> Understand latency requirements for 259B Visa transactions vs. current ARIC capabilities</li>
+                            <li><strong>Multi-tenant Architecture:</strong> Review ARIC White Label configuration for secure data segregation</li>
+                        </ul>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Integration Landscape Mapping</h4>
+                        <ul>
+                            <li><strong>Visa Systems:</strong> Map touchpoints with Visa's existing fraud prevention suite</li>
+                            <li><strong>Data Flow:</strong> Document how ARIC will ingest Visa's transaction data (using my SEIC data pipeline experience)</li>
+                            <li><strong>Customer Impact:</strong> Identify which of the 100,000+ businesses need migration support</li>
+                            <li><strong>Regulatory Requirements:</strong> Understand PSD2, PCI-DSS implications for integrated platform</li>
+                        </ul>
+                        
+                        <div class="deliverable">
+                            <strong>Week 2 Deliverable:</strong> "Integration Impact Assessment" - 20-page technical document mapping all integration points, dependencies, and risks. Include specific recommendations for maintaining sub-100ms latency while processing Visa's transaction volume. Present to both Featurespace engineering and Visa Risk Solutions leadership.
+                        </div>
+                    </div>
+                    
+                    <div class="week-block">
+                        <div class="week-title">Week 3-4: Customer Discovery & Quick Win Identification</div>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Customer Research Sprint</h4>
+                        <ul>
+                            <li><strong>Enterprise Clients:</strong> Interview 5 HSBC/NatWest stakeholders about ARIC adoption challenges</li>
+                            <li><strong>SME Segment:</strong> Connect with 10 SMEs (leveraging my Vis(AI)D project insights) about fraud pain points</li>
+                            <li><strong>Check Fraud Focus:</strong> Deep dive with 3 US banks on $24B check fraud problem</li>
+                            <li><strong>Scam Prevention:</strong> Analyze ARIC Scam Detect adoption with APP fraud victims</li>
+                        </ul>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Quick Win Opportunities</h4>
+                        <ul>
+                            <li><strong>False Positive Reduction:</strong> Identify top 5 rules causing unnecessary friction</li>
+                            <li><strong>Onboarding Acceleration:</strong> Map current 3-month implementation to find 30% reduction opportunities</li>
+                            <li><strong>UI/UX Improvements:</strong> Using Figma, design 3 dashboard enhancements for case management</li>
+                        </ul>
+                        
+                        <div class="metric-box">
+                            <strong>Target Metrics by Week 4:</strong>
+                            <ul>
+                                <li>Complete 20+ customer interviews with documented insights</li>
+                                <li>Identify 5 quick wins with <30 day implementation</li>
+                                <li>Map integration dependencies for top 10 enterprise clients</li>
+                                <li>Establish baseline: Current 3:1 false positive ratio for improvement tracking</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="month-section">
+                <div class="month-header">Month 2: Accelerate & Integrate (Days 31-60)</div>
+                <div class="week-container">
+                    
+                    <div class="week-block">
+                        <div class="week-title">Week 5-6: First Feature Ships & Integration MVPs</div>
+                        
+                        <div class="integration-focus">
+                            <h4>🚀 Priority Integration: Visa Token Service + ARIC Behavioral Analytics</h4>
+                            <p>Combining Visa's tokenization with ARIC's individual profiling to detect token fraud patterns - a first-in-market capability addressing the rise in digital wallet fraud.</p>
+                        </div>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Sprint Deliverables (Using My Agile Experience)</h4>
+                        <ul>
+                            <li><strong>Epic Creation:</strong> Break down integration into 15 user stories with clear acceptance criteria</li>
+                            <li><strong>API Documentation:</strong> Write technical specs for Visa-ARIC data exchange (REST/GraphQL)</li>
+                            <li><strong>Performance Testing:</strong> Ensure <100ms latency at 10,000 TPS (transactions per second)</li>
+                            <li><strong>MVP Release:</strong> Deploy to 5 pilot customers by end of Week 6</li>
+                        </ul>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Check Fraud Solution Enhancement</h4>
+                        <ul>
+                            <li><strong>OrboGraph Integration:</strong> Optimize image forensics partnership for check washing detection</li>
+                            <li><strong>Pattern Library:</strong> Build repository of 50+ fraud patterns from my Bank of Ireland experience</li>
+                            <li><strong>A/B Testing:</strong> Run experiments on detection threshold optimization</li>
+                        </ul>
+                        
+                        <div class="deliverable">
+                            <strong>Week 6 Deliverable:</strong> Ship "ARIC + Visa Token Intelligence" MVP to 5 pilot customers. Target: Detect 95% of token fraud with 2:1 false positive ratio (better than current 3:1).
+                        </div>
+                    </div>
+                    
+                    <div class="week-block">
+                        <div class="week-title">Week 7-8: Team Velocity & Process Optimization</div>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Agile Process Implementation</h4>
+                        <ul>
+                            <li><strong>Sprint Cadence:</strong> Establish 2-week sprints with clear velocity metrics</li>
+                            <li><strong>Daily Standups:</strong> Implement cross-team standups (Cambridge + San Francisco)</li>
+                            <li><strong>Backlog Grooming:</strong> Prioritize 100+ integration tasks using RICE framework</li>
+                            <li><strong>Retrospectives:</strong> Facilitate bi-weekly retros focusing on integration friction</li>
+                        </ul>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Cloud Migration Acceleration</h4>
+                        <ul>
+                            <li><strong>AWS Architecture:</strong> Design multi-region deployment for global redundancy</li>
+                            <li><strong>Kubernetes Orchestration:</strong> Implement auto-scaling for demand spikes</li>
+                            <li><strong>Cost Optimization:</strong> Identify 20% infrastructure savings through efficient resource allocation</li>
+                        </ul>
+                        
+                        <div class="metric-box">
+                            <strong>Week 8 Success Metrics:</strong>
+                            <ul>
+                                <li>Team velocity increased by 25% (story points per sprint)</li>
+                                <li>Integration deployment time reduced from 3 months to 6 weeks</li>
+                                <li>Cloud infrastructure costs optimized by 20%</li>
+                                <li>Customer satisfaction score improved to 4.5/5</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="month-section">
+                <div class="month-header">Month 3: Scale & Strategic Ownership (Days 61-90)</div>
+                <div class="week-container">
+                    
+                    <div class="week-block">
+                        <div class="week-title">Week 9-10: Strategic Feature Ownership - SME Protection Suite</div>
+                        
+                        <div class="persona-card">
+                            <h4>🎯 Strategic Initiative: "ARIC Shield for SMEs"</h4>
+                            <p><strong>Vision:</strong> Democratize enterprise-grade fraud protection for 30M+ SMEs globally</p>
+                            <p><strong>Personal Connection:</strong> Building on my Vis(AI)D project insights about SME vulnerability</p>
+                            <p style="margin-top: 10px;">Target Market: SMEs processing <$10M annually, currently unprotected or using basic rules</p>
+                        </div>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Product Strategy & Roadmap</h4>
+                        <ul>
+                            <li><strong>Tiered Offering:</strong> Design 3 tiers - Starter ($99/mo), Growth ($499/mo), Scale ($2499/mo)</li>
+                            <li><strong>Self-Service Onboarding:</strong> Build wizard reducing setup from 3 months to 3 hours</li>
+                            <li><strong>Pre-trained Models:</strong> Package industry-specific models (retail, hospitality, e-commerce)</li>
+                            <li><strong>Visa Network Effect:</strong> Leverage Visa's 100M+ merchant relationships for distribution</li>
+                        </ul>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Technical Implementation</h4>
+                        <ul>
+                            <li><strong>Simplified API:</strong> Create RESTful API requiring only 5 endpoints vs. current 50+</li>
+                            <li><strong>No-Code Dashboard:</strong> Build Zapier/Make.com integrations for non-technical users</li>
+                            <li><strong>Real-time Alerts:</strong> Implement WhatsApp/SMS notifications for fraud attempts</li>
+                            <li><strong>Behavioral Learning:</strong> Start protection immediately, improve accuracy over 30 days</li>
+                        </ul>
+                        
+                        <div class="deliverable">
+                            <strong>Week 10 Deliverable:</strong> Complete PRD for "ARIC Shield for SMEs" with go-to-market strategy, pricing model, and technical architecture. Present to Visa leadership with projected $50M revenue opportunity in Year 1.
+                        </div>
+                    </div>
+                    
+                    <div class="week-block">
+                        <div class="week-title">Week 11-12: Scale, Measure & Present Strategic Vision</div>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Metrics Framework & Performance Dashboard</h4>
+                        <ul>
+                            <li><strong>North Star Metric:</strong> Fraud losses prevented per $1M processed (target: <$100)</li>
+                            <li><strong>Operational Metrics:</strong> Time to detection (<50ms), False positive ratio (<2:1)</li>
+                            <li><strong>Customer Metrics:</strong> Implementation time (<30 days), NPS (>70)</li>
+                            <li><strong>Business Metrics:</strong> Revenue per customer, Churn rate (<5%), LTV/CAC (>3)</li>
+                        </ul>
+                        
+                        <h4 style="color: #2c5282; margin: 15px 0;">Q2 Strategic Roadmap</h4>
+                        <ul>
+                            <li><strong>Expansion:</strong> Launch ARIC in 5 new markets (focusing on APAC growth)</li>
+                            <li><strong>Innovation:</strong> Develop GenAI features for fraud explanation and prevention recommendations</li>
+                            <li><strong>Partnerships:</strong> Integrate with 10 major PSPs (Payment Service Providers)</li>
+                            <li><strong>Platform Evolution:</strong> Build marketplace for fraud intelligence sharing between institutions</li>
+                        </ul>
+                        
+                        <div class="deliverable">
+                            <strong>Week 12 Final Deliverable:</strong> Present "ARIC 2025: From Acquisition to Market Leadership" to Visa executive team. Include 3-year vision, Q2-Q4 roadmap, resource requirements, and projected ROI of $500M+ from fraud prevention improvements.
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="risk-section">
+                <h2 style="color: #c0392b; margin-bottom: 15px;">Risk Mitigation Strategy</h2>
+                
+                <div class="risk-item">
+                    <strong>Integration Complexity Risk:</strong>
+                    <p>Challenge: Merging ARIC with Visa's systems without disrupting 259B annual transactions</p>
+                    <p>Mitigation: Implement gradual rollout with canary deployments, maintain parallel systems for 6 months</p>
+                    <p>My Experience: Managed $1.5B AUM at SEIC with zero downtime during system migrations</p>
+                </div>
+                
+                <div class="risk-item">
+                    <strong>Cultural Integration Risk:</strong>
+                    <p>Challenge: Maintaining Featurespace's innovation culture within Visa's corporate structure</p>
+                    <p>Mitigation: Preserve Cambridge team autonomy, implement "Innovation Fridays" for experimentation</p>
+                    <p>My Experience: Successfully bridged startup/corporate cultures during UN Global Compact project</p>
+                </div>
+                
+                <div class="risk-item">
+                    <strong>Customer Retention Risk:</strong>
+                    <p>Challenge: Preventing churn during platform migration (currently 0% churn rate)</p>
+                    <p>Mitigation: Assign dedicated success managers, offer migration incentives, guarantee no service disruption</p>
+                    <p>My Experience: Maintained 40+ investor relationships at SEIC during major operational changes</p>
+                </div>
+                
+                <div class="risk-item">
+                    <strong>Technical Debt Risk:</strong>
+                    <p>Challenge: Accumulating technical debt while racing to integrate</p>
+                    <p>Mitigation: Allocate 20% of sprint capacity to refactoring, implement automated testing from Day 1</p>
+                    <p>My Experience: Built maintainable systems in 5-day hackathons that scaled beyond MVP</p>
+                </div>
+            </div>
+            
+            <div class="success-criteria">
+                <h2 style="color: #27ae60; margin-bottom: 15px;">90-Day Success Metrics</h2>
+                
+                <h3>Month 1 Targets:</h3>
+                <ul>
+                    <li>✓ Complete technical assessment of ARIC platform with 50+ page documentation</li>
+                    <li>✓ Interview 20+ customers across enterprise, SME, and financial institution segments</li>
+                    <li>✓ Identify 5 integration quick wins implementable within 30 days</li>
+                    <li>✓ Establish baseline metrics for all KPIs</li>
+                </ul>
+                
+                <h3>Month 2 Targets:</h3>
+                <ul>
+                    <li>✓ Ship first Visa-ARIC integration feature to 5+ pilot customers</li>
+                    <li>✓ Reduce false positive ratio from 3:1 to 2.5:1</li>
+                    <li>✓ Increase sprint velocity by 25%</li>
+                    <li>✓ Complete cloud migration plan with 20% cost savings identified</li>
+                </ul>
+                
+                <h3>Month 3 Targets:</h3>
+                <ul>
+                    <li>✓ Own and deliver SME Protection Suite PRD with $50M revenue projection</li>
+                    <li>✓ Present Q2 strategic roadmap to Visa leadership with full buy-in</li>
+                    <li>✓ Achieve 4.5/5 customer satisfaction score</li>
+                    <li>✓ Establish myself as go-to Product Owner for ARIC platform evolution</li>
+                </ul>
+            </div>
+            
+            <div class="integration-focus" style="margin-top: 40px;">
+                <h2 style="color: #e65100; margin-bottom: 15px;">Why I'm Uniquely Positioned for This Role</h2>
+                
+                <div style="margin-top: 20px;">
+                    <h4>1. Direct Visa Experience + Fraud Detection Background</h4>
+                    <p>As a VISA Sprint Finalist, I've already demonstrated my ability to build solutions that Visa's innovation team values. My Vis(AI)D project focused on protecting SMEs - exactly the market segment where ARIC can expand. Combined with detecting fraud patterns at Bank of Ireland that saved €2M+, I understand both sides of the equation.</p>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>2. Technical Depth with Business Acumen</h4>
+                    <p>My 92% accurate sentiment analyzer uses similar ML techniques to ARIC's behavioral analytics. But I also managed $1.5B at SEIC, so I understand the business impact of false positives and the importance of balancing security with customer experience.</p>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>3. Integration Experience at Scale</h4>
+                    <p>During Bank of Ireland's KBC acquisition, I managed the integration of thousands of mortgage files while maintaining compliance and detecting fraud. I know how to handle complex integrations without dropping the ball.</p>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>4. Proven Sprint Velocity</h4>
+                    <p>Won hackathons, delivered for UN Global Compact, pitched to Visa - I consistently deliver under pressure. Give me 90 days, and I'll show you what 3 years of impact looks like.</p>
+                </div>
+            </div>
+            
+            <div class="tech-stack">
+                <div class="tech-item">JIRA/Confluence</div>
+                <div class="tech-item">AWS/Kubernetes</div>
+                <div class="tech-item">Python/TensorFlow</div>
+                <div class="tech-item">REST/GraphQL APIs</div>
+                <div class="tech-item">Figma/Miro</div>
+                <div class="tech-item">GitHub/GitLab</div>
+                <div class="tech-item">Datadog/Splunk</div>
+                <div class="tech-item">Tableau/PowerBI</div>
+            </div>
+            
+        </div>
+        
+        <div class="footer-section">
+            <h2>Ready to Transform Fraud Prevention at Scale</h2>
+            <p style="margin-top: 20px; font-size: 1.1em;">
+                With 259 billion transactions to protect and $24B+ in fraud losses to prevent, 
+                the stakes couldn't be higher. I've already shown Visa what I can build in 5 days. 
+                Now let me show you what I can deliver as your Product Owner.
+            </p>
+            <div class="cta-button">Let's Protect the World's Payments Together</div>
+            
+            <div style="margin-top: 40px; opacity: 0.9;">
+                <p><strong>Contact:</strong> Naoise Law | lawnaoise@gmail.com | +447849397455</p>
+                <p style="margin-top: 10px;"><em>"From detecting fraud at Bank of Ireland to building fraud prevention for Visa"</em></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

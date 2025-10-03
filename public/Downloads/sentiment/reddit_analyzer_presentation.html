@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit Racism Analyzer - Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .slide {
+            width: 90%;
+            max-width: 1200px;
+            height: 85%;
+            max-height: 650px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            display: none;
+            flex-direction: column;
+            padding: 50px 60px 80px 60px;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            color: #666;
+            font-size: 14px;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .control-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .title-slide h1 {
+            font-size: 72px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 32px;
+            margin-bottom: 50px;
+            opacity: 0.9;
+        }
+
+        .title-slide .meta {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        /* Content Slides */
+        .slide h2 {
+            font-size: 44px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .slide h3 {
+            font-size: 28px;
+            color: #34495e;
+            margin-bottom: 20px;
+            margin-top: 25px;
+        }
+
+        .slide p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .slide ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 20px;
+        }
+
+        .slide li {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 12px;
+            padding-left: 35px;
+            position: relative;
+        }
+
+        .slide li:before {
+            content: "▸";
+            position: absolute;
+            left: 10px;
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .feature-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-box h4 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .feature-box p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .process-step {
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .process-step .icon {
+            width: 70px;
+            height: 70px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 15px;
+        }
+
+        .process-step h4 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .process-step p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .arrow {
+            font-size: 30px;
+            color: #667eea;
+        }
+
+        .rating-scale {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .rating-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .rating-item:hover {
+            background: #e9ecef;
+        }
+
+        .rating-level {
+            width: 70px;
+            height: 35px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .level-1 { background: #27ae60; }
+        .level-2 { background: #f39c12; }
+        .level-3 { background: #e67e22; }
+        .level-4 { background: #e74c3c; }
+        .level-5 { background: #8e44ad; }
+        .level-6 { background: #2c3e50; }
+
+        .rating-text {
+            flex: 1;
+        }
+
+        .rating-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .rating-desc {
+            font-size: 14px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .tech-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .tech-item .icon {
+            font-size: 40px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .tech-item h5 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .tech-item p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .use-case {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .use-case h4 {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .use-case p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .cta-slide {
+            text-align: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .cta-slide h2 {
+            color: white;
+            border-color: white;
+            font-size: 56px;
+        }
+
+        .cta-slide p {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .cta-btn {
+            padding: 20px 40px;
+            font-size: 20px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 25px 70px 25px;
+            }
+            
+            .slide h1 {
+                font-size: 42px;
+            }
+            
+            .slide h2 {
+                font-size: 32px;
+            }
+            
+            .slide h3 {
+                font-size: 24px;
+            }
+            
+            .slide p {
+                font-size: 16px;
+            }
+            
+            .slide li {
+                font-size: 16px;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-grid,
+            .tech-stack,
+            .use-case-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .process-flow {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+            
+            .controls {
+                bottom: 10px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide active">
+            <h1>Reddit Racism Analyzer</h1>
+            <p class="subtitle">AI-Powered Content Analysis for Safer Online Communities</p>
+            <p class="meta">Advanced Machine Learning Solution for Reddit Moderation</p>
+        </div>
+
+        <!-- Slide 2: Overview -->
+        <div class="slide">
+            <h2>Project Overview</h2>
+            <div class="two-column">
+                <div>
+                    <h3>What It Does</h3>
+                    <ul>
+                        <li>Analyzes Reddit users for racist/hateful content</li>
+                        <li>Evaluates entire subreddit communities</li>
+                        <li>Provides actionable insights for moderation</li>
+                        <li>Uses advanced AI for accurate detection</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li>Multi-model AI ensemble</li>
+                        <li>Context-aware analysis</li>
+                        <li>Real-time progress tracking</li>
+                        <li>Professional reporting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number">2 / 12</div>
+        </div>
+
+        <!-- Slide 3: How It Works - User Analysis -->
+        <div class="slide">
+            <h2>How It Works: User Analysis</h2>
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="icon">1</div>
+                    <h4>Input Username</h4>
+                    <p>Enter Reddit username or profile URL</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-step">
+                    <div class="icon">2</div>
+                    <h4>Fetch Content</h4>
+                    <p>Retrieve posts & comments from Reddit</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-step">
+                    <div class="icon">3</div>
+                    <h4>AI Analysis</h4>
+                    <p>3 models analyze each piece of content</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-step">
+                    <div class="icon">4</div>
+                    <h4>Get Results</h4>
+                    <p>Receive comprehensive report</p>
+                </div>
+            </div>
+            <div class="slide-number">3 / 12</div>
+        </div>
+
+        <!-- Slide 4: How It Works - Community Analysis -->
+        <div class="slide">
+            <h2>How It Works: Community Analysis</h2>
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="icon">1</div>
+                    <h4>Input Subreddit</h4>
+                    <p>Enter subreddit name</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-step">
+                    <div class="icon">2</div>
+                    <h4>Sample Users</h4>
+                    <p>Select 100 active members</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-step">
+                    <div class="icon">3</div>
+                    <h4>Analyze Each</h4>
+                    <p>Run user analysis on sample</p>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-step">
+                    <div class="icon">4</div>
+                    <h4>Community Health</h4>
+                    <p>Calculate overall metrics</p>
+                </div>
+            </div>
+            <div class="slide-number">4 / 12</div>
+        </div>
+
+        <!-- Slide 5: AI Technology -->
+        <div class="slide">
+            <h2>Advanced AI Technology</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <div class="icon">🧠</div>
+                    <h5>Toxic-BERT</h5>
+                    <p>Specialized toxic language detection</p>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">🎯</div>
+                    <h5>Hate Speech Model</h5>
+                    <p>Trained on social media hate</p>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">🐦</div>
+                    <h5>Twitter RoBERTa</h5>
+                    <p>Short-form content optimized</p>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">📚</div>
+                    <h5>Context Analyzer</h5>
+                    <p>Reduces false positives</p>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">💾</div>
+                    <h5>Smart Caching</h5>
+                    <p>Speeds up repeated analyses</p>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">⚡</div>
+                    <h5>Parallel Processing</h5>
+                    <p>Analyzes multiple items at once</p>
+                </div>
+            </div>
+            <div class="slide-number">5 / 12</div>
+        </div>
+
+        <!-- Slide 6: Rating System -->
+        <div class="slide">
+            <h2>6-Level Rating System</h2>
+            <div class="rating-scale">
+                <div class="rating-item">
+                    <div class="rating-level level-1">Level 1</div>
+                    <div class="rating-text">
+                        <div class="rating-title">Anti-Racist</div>
+                        <div class="rating-desc">Actively promotes equality and inclusivity</div>
+                    </div>
+                </div>
+                <div class="rating-item">
+                    <div class="rating-level level-2">Level 2</div>
+                    <div class="rating-text">
+                        <div class="rating-title">Generally Inclusive</div>
+                        <div class="rating-desc">Mostly positive with occasional insensitive language</div>
+                    </div>
+                </div>
+                <div class="rating-item">
+                    <div class="rating-level level-3">Level 3</div>
+                    <div class="rating-text">
+                        <div class="rating-title">Mildly Problematic</div>
+                        <div class="rating-desc">Some concerning patterns but not overtly racist</div>
+                    </div>
+                </div>
+                <div class="rating-item">
+                    <div class="rating-level level-4">Level 4</div>
+                    <div class="rating-text">
+                        <div class="rating-title">Moderately Racist</div>
+                        <div class="rating-desc">Clear patterns of discriminatory language</div>
+                    </div>
+                </div>
+                <div class="rating-item">
+                    <div class="rating-level level-5">Level 5</div>
+                    <div class="rating-text">
+                        <div class="rating-title">Highly Racist</div>
+                        <div class="rating-desc">Consistent use of racist language and ideas</div>
+                    </div>
+                </div>
+                <div class="rating-item">
+                    <div class="rating-level level-6">Level 6</div>
+                    <div class="rating-text">
+                        <div class="rating-title">CEO of Racism</div>
+                        <div class="rating-desc">Extreme and pervasive racist content</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">6 / 12</div>
+        </div>
+
+        <!-- Slide 7: Results - User Analysis -->
+        <div class="slide">
+            <h2>User Analysis Results</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Metrics Provided</h3>
+                    <ul>
+                        <li>Overall racism score (0.000 - 1.000)</li>
+                        <li>Rating level (1-6) with description</li>
+                        <li>Confidence level of analysis</li>
+                        <li>Total content analyzed</li>
+                        <li>Number of flagged items</li>
+                        <li>High-risk content count</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Detailed Insights</h3>
+                    <ul>
+                        <li>Top 5 most problematic posts/comments</li>
+                        <li>Direct links to flagged content</li>
+                        <li>Context indicators (quoted, educational)</li>
+                        <li>Individual AI model scores</li>
+                        <li>Temporal patterns over time</li>
+                        <li>Most active subreddits</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number">7 / 12</div>
+        </div>
+
+        <!-- Slide 8: Results - Community Analysis -->
+        <div class="slide">
+            <h2>Community Analysis Results</h2>
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <h4>Community Health Score</h4>
+                    <p>Overall racism level of the subreddit based on sampled users</p>
+                </div>
+                <div class="feature-box">
+                    <h4>User Risk Breakdown</h4>
+                    <p>Percentage of high, moderate, and low-risk community members</p>
+                </div>
+                <div class="feature-box">
+                    <h4>Top Problematic Users</h4>
+                    <p>Identifies the most concerning members for moderation focus</p>
+                </div>
+                <div class="feature-box">
+                    <h4>Cross-Community Analysis</h4>
+                    <p>Shows what other subreddits users frequent (influence patterns)</p>
+                </div>
+            </div>
+            <div class="slide-number">8 / 12</div>
+        </div>
+
+        <!-- Slide 9: Use Cases -->
+        <div class="slide">
+            <h2>Real-World Applications</h2>
+            <div class="use-case-grid">
+                <div class="use-case">
+                    <h4>Reddit Moderators</h4>
+                    <p>Assess community health and identify problem users for focused moderation</p>
+                </div>
+                <div class="use-case">
+                    <h4>Researchers</h4>
+                    <p>Study online hate speech patterns and community dynamics</p>
+                </div>
+                <div class="use-case">
+                    <h4>Self-Assessment</h4>
+                    <p>Check your own posting history for unconscious bias</p>
+                </div>
+                <div class="use-case">
+                    <h4>Community Leaders</h4>
+                    <p>Monitor and improve community culture proactively</p>
+                </div>
+                <div class="use-case">
+                    <h4>Parents & Educators</h4>
+                    <p>Understand online environments where youth participate</p>
+                </div>
+                <div class="use-case">
+                    <h4>Platform Safety Teams</h4>
+                    <p>Identify high-risk communities requiring intervention</p>
+                </div>
+            </div>
+            <div class="slide-number">9 / 12</div>
+        </div>
+
+        <!-- Slide 10: Key Benefits -->
+        <div class="slide">
+            <h2>Key Benefits</h2>
+            <div class="two-column">
+                <div>
+                    <h3>For Users</h3>
+                    <ul>
+                        <li>Simple, intuitive interface</li>
+                        <li>Fast results (seconds, not hours)</li>
+                        <li>Actionable insights with examples</li>
+                        <li>Professional reports for decisions</li>
+                        <li>Free and accessible tool</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>For Communities</h3>
+                    <ul>
+                        <li>Proactive toxicity detection</li>
+                        <li>Data-driven moderation</li>
+                        <li>Community health tracking</li>
+                        <li>Cross-pollination insights</li>
+                        <li>Safer online spaces</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number">10 / 12</div>
+        </div>
+
+        <!-- Slide 11: Important Considerations -->
+        <div class="slide">
+            <h2>Important Considerations</h2>
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <h4>🔬 Research Tool</h4>
+                    <p>Designed for awareness and community improvement, not punishment</p>
+                </div>
+                <div class="feature-box">
+                    <h4>🤖 AI Limitations</h4>
+                    <p>Can make mistakes - human review always recommended</p>
+                </div>
+                <div class="feature-box">
+                    <h4>📚 Context Matters</h4>
+                    <p>Educational content may be flagged - check context indicators</p>
+                </div>
+                <div class="feature-box">
+                    <h4>🔒 Privacy First</h4>
+                    <p>Only analyzes publicly available Reddit content</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 30px; font-style: italic; padding-bottom: 20px;">
+                "Like an X-ray machine for Reddit - revealing hidden patterns for community health"
+            </p>
+            <div class="slide-number">11 / 12</div>
+        </div>
+
+        <!-- Slide 12: Call to Action -->
+        <div class="slide cta-slide">
+            <h2>Ready to Analyze?</h2>
+            <p>Start creating safer, more inclusive Reddit communities today</p>
+            <div class="cta-buttons">
+                <button class="cta-btn cta-primary">Try the Analyzer</button>
+                <button class="cta-btn cta-secondary">Learn More</button>
+            </div>
+            <p style="font-size: 20px; margin-top: 60px; opacity: 0.8;">
+                Built with ❤️ for a better Reddit
+            </p>
+            <div class="slide-number">12 / 12</div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="controls">
+            <button class="control-btn" id="prevBtn" onclick="changeSlide(-1)">Previous</button>
+            <button class="control-btn" id="nextBtn" onclick="changeSlide(1)">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (n >= totalSlides) currentSlide = 0;
+            if (n < 0) currentSlide = totalSlides - 1;
+            
+            slides[currentSlide].classList.add('active');
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Home') {
+                currentSlide = 0;
+                showSlide(currentSlide);
+            }
+            if (e.key === 'End') {
+                currentSlide = totalSlides - 1;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+
+        // Fullscreen support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'f' || e.key === 'F') {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
