@@ -36,7 +36,7 @@ const navigation: NavItem[] = [
     href: "/projects",
     icon: FolderIcon
   },
-  { name: "Skills", href: "/#skills", icon: WrenchScrewdriverIcon },
+  { name: "Blog", href: "/blog", icon: WrenchScrewdriverIcon },
   { name: "Contact", href: "/#contact", icon: EnvelopeIcon },
 ];
 

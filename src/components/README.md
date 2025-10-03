@@ -1,7 +1,35 @@
-# AnaphorShowcase Component
+# Portfolio Components
 
-## Overview
+## AnaphorShowcase Component
+
+### Overview
 The `AnaphorShowcase` component provides an interactive preview of the Anaphor Analytics website with responsive device views and fallback handling.
+
+## PDFViewer Component
+
+### Overview
+The `PDFViewer` component provides an embedded, scrollable PDF viewer with controls for downloading, fullscreen viewing, and fallback handling.
+
+### Features
+- ✅ Embedded PDF viewing with browser compatibility
+- ✅ Download and external link buttons
+- ✅ Fullscreen modal viewing
+- ✅ Show/hide toggle for space management
+- ✅ Fallback UI for unsupported browsers
+- ✅ Professional styling and responsive design
+
+## MultiPDFViewer Component
+
+### Overview
+The `MultiPDFViewer` component displays multiple PDF documents with tabbed navigation and individual viewers for each document.
+
+### Features
+- ✅ Tabbed interface for multiple documents
+- ✅ Document type categorization (presentation, report, documentation, proposal)
+- ✅ Overview cards with document details
+- ✅ Individual PDF viewers for each document
+- ✅ Download and external link functionality
+- ✅ Responsive design with mobile optimization
 
 ## Features
 - ✅ Responsive device preview (Desktop/Tablet/Mobile)

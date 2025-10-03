@@ -217,7 +217,7 @@ export default function Page() {
                 Let&apos;s Connect
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Interested in AI, automation, or digital transformation? I&apos;d love to discuss how technology can solve your business challenges. Currently seeking opportunities in product management and tech consulting.
+                Interested in AI, automation, or digital transformation? I&apos;d love to discuss how technology can solve your business challenges. Currently seeking opportunities in product management, as a Founders Associate and tech consulting.
               </p>
             </div>
           </BlurFade>
