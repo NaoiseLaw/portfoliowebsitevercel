@@ -1,0 +1,316 @@
+---
+title: "Skills, Agents, and Whatever YAML Does: The Future of AI Workflows"
+publishedAt: "2026-04-29"
+summary: "AI agents are getting skills. Defined in YAML. Executed automatically. It's changing how we build AI systems. Here's what's actually happening."
+tags: ["AI agents", "YAML", "automation", "AI workflows"]
+---
+
+AI agents just learned to follow instructions.
+
+Not prompts. Actual structured workflows.
+
+**How?** Skills defined in YAML files.
+
+**Why it matters**: AI can now execute complex multi-step processes reliably.
+
+## What Are AI Agent Skills?
+
+**Traditional AI**: You prompt, it responds
+
+**AI with skills**: You invoke skill, it executes workflow
+
+**Example**:
+
+**Prompt**: "Deploy this app to production"
+
+**Skill**: `deploy-to-production.yaml`
+```yaml
+steps:
+  - run_tests
+  - build_docker_image  
+  - push_to_registry
+  - update_k8s_deployment
+  - verify_health_checks
+  - notify_team
+```
+
+**Difference**: Skill is repeatable, reliable, auditable
+
+## Why YAML?
+
+**YAML**: Human-readable configuration format
+
+**Why it works for AI**:
+- Structured (AI can parse it)
+- Readable (humans can edit it)
+- Flexible (supports complex workflows)
+- Standard (widely adopted)
+
+**Alternative**: JSON (too verbose), Python (too complex)
+
+**Verdict**: YAML is the sweet spot
+
+## Real-World Example: Windsurf Skills
+
+**Windsurf IDE**: AI-powered development environment
+
+**Skills system**: YAML-defined workflows
+
+**Example skill**: Blog post creation
+
+```yaml
+name: blog-writing
+description: Create SEO-optimized blog post
+steps:
+  - research_topic:
+      tools: [web_search, read_url]
+  - create_outline:
+      output: structured_outline
+  - write_draft:
+      style: naoise_voice
+      length: 1500-2500_words
+  - optimize_seo:
+      keywords: from_research
+  - add_cta:
+      template: consultation_link
+```
+
+**Invocation**: "Write blog post about token economics"
+
+**Result**: AI follows workflow, produces consistent output
+
+## The Benefits
+
+### Benefit #1: Consistency
+
+**Without skills**: Every execution is different
+
+**With skills**: Same workflow every time
+
+**Impact**: Reliable results
+
+### Benefit #2: Reusability
+
+**Without skills**: Rewrite prompts for each task
+
+**With skills**: Define once, use forever
+
+**Impact**: 10× faster for repeated tasks
+
+### Benefit #3: Auditability
+
+**Without skills**: Black box. What did AI do?
+
+**With skills**: Clear steps. Logged execution.
+
+**Impact**: Compliance, debugging, trust
+
+### Benefit #4: Collaboration
+
+**Without skills**: Prompts in people's heads
+
+**With skills**: YAML files in git
+
+**Impact**: Team can share, version, improve
+
+## The Architecture
+
+**Skill definition** (YAML):
+```yaml
+name: security-review
+inputs:
+  - codebase_path
+  - severity_threshold
+steps:
+  - scan_dependencies:
+      tool: npm_audit
+  - check_secrets:
+      tool: git_secrets
+  - analyze_code:
+      tool: semgrep
+  - generate_report:
+      format: markdown
+outputs:
+  - security_report.md
+  - findings_count
+```
+
+**Execution**:
+1. User invokes skill
+2. AI reads YAML
+3. AI executes steps in order
+4. AI uses specified tools
+5. AI generates outputs
+
+**Result**: Structured, repeatable workflow
+
+## The Ecosystem
+
+**Windsurf**: Built-in skills system
+
+**LangChain**: Agents with tools (similar concept)
+
+**AutoGPT**: Autonomous agents with goals
+
+**CrewAI**: Multi-agent systems with roles
+
+**Convergence**: Everyone moving toward skill-based agents
+
+## Real Use Cases
+
+### Use Case #1: Code Review
+
+**Skill**: `code-review.yaml`
+
+**Steps**:
+1. Read changed files
+2. Check style guidelines
+3. Identify bugs
+4. Suggest improvements
+5. Generate review comment
+
+**Impact**: Consistent code reviews, 80% faster
+
+### Use Case #2: Content Publishing
+
+**Skill**: `publish-blog-post.yaml`
+
+**Steps**:
+1. Write blog post
+2. Generate meta description
+3. Create social media posts
+4. Schedule LinkedIn posts
+5. Update content calendar
+
+**Impact**: End-to-end publishing, 90% automated
+
+### Use Case #3: Customer Onboarding
+
+**Skill**: `onboard-customer.yaml`
+
+**Steps**:
+1. Create account
+2. Send welcome email
+3. Schedule kickoff call
+4. Provision resources
+5. Update CRM
+
+**Impact**: Zero manual work, perfect execution
+
+## The Limitations
+
+### Limitation #1: Rigidity
+
+**Problem**: Skills are structured. Real world is messy.
+
+**Example**: Skill assumes happy path. What if step fails?
+
+**Solution**: Error handling, fallbacks, human escalation
+
+### Limitation #2: Complexity
+
+**Problem**: Complex workflows = complex YAML
+
+**Example**: 50-step deployment with conditionals
+
+**Solution**: Break into smaller skills, compose them
+
+### Limitation #3: Tool Dependency
+
+**Problem**: Skills require specific tools
+
+**Example**: Skill uses GitHub API. What if you use GitLab?
+
+**Solution**: Parameterize tools, make skills adaptable
+
+## How to Build Skills
+
+### Step 1: Identify Repeated Workflows
+
+What do you do repeatedly?
+- Deploy code
+- Write blog posts
+- Review PRs
+- Onboard customers
+
+### Step 2: Break Into Steps
+
+What are the discrete steps?
+1. Input
+2. Process
+3. Output
+4. Verification
+
+### Step 3: Define in YAML
+
+```yaml
+name: your-skill
+description: What it does
+inputs: [what it needs]
+steps:
+  - step_1: details
+  - step_2: details
+outputs: [what it produces]
+```
+
+### Step 4: Test and Iterate
+
+Run it. Fix errors. Improve.
+
+### Step 5: Share and Reuse
+
+Commit to git. Share with team. Build library.
+
+## The 2026-2027 Future
+
+**Prediction #1**: Every AI tool will have skills system
+
+**Prediction #2**: Skill marketplaces emerge (buy/sell workflows)
+
+**Prediction #3**: AI generates skills from descriptions
+
+**Prediction #4**: Skills become standard for enterprise AI
+
+**Result**: AI agents become reliable, repeatable, valuable
+
+## Should You Use Skills?
+
+**Yes, if**:
+- You have repeated workflows
+- You need consistency
+- You want auditability
+- You work in a team
+
+**No, if**:
+- One-off tasks only
+- Workflows change constantly
+- Simple prompts work fine
+
+**My recommendation**: Start with 3-5 core skills. Expand from there.
+
+## Your Next Steps
+
+**Identify your workflows**:
+1. What do you do repeatedly?
+2. What takes 30+ minutes?
+3. What requires multiple steps?
+
+**Build your first skill**:
+1. Pick simplest workflow
+2. Define in YAML
+3. Test with AI agent
+4. Iterate and improve
+
+**Scale up**:
+1. Build skill library
+2. Share with team
+3. Measure time saved
+4. Optimize and expand
+
+**Or get expert help** building AI agent skills for your workflows.
+
+[Book Free Consultation →](https://cal.com/naoise-law/consultation)
+
+---
+
+**The bottom line**: AI agents with skills are the future of automation. YAML-defined workflows make AI reliable, repeatable, and valuable. Start building your skill library today.
