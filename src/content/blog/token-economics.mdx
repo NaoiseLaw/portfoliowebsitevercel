@@ -1,0 +1,298 @@
+---
+title: "Token Economics: The $200B Infrastructure Nobody's Talking About"
+publishedAt: "2026-03-15"
+summary: "Most companies don't know they're paying 8× more for output tokens than input tokens. That's a €60B mistake. Here's what you need to know about token economics in 2026."
+tags: ["token economics", "AI optimization", "LLM costs", "cost reduction"]
+---
+
+Most companies don't know they're paying 8× more for output tokens than input tokens.
+
+That's a €60B mistake across the AI industry.
+
+Token pricing looks simple on the surface—a few cents per million tokens. But underneath is a complex economy that determines who wins and loses in the AI race. Understanding token economics is the difference between profitable AI and burning cash.
+
+## The Three Token Types You're Paying For
+
+In 2026, you're not just paying for "tokens" anymore. You're paying for three distinct types:
+
+### 1. Input Tokens (Cheapest)
+Text you send to the model. Processed in parallel. Fast and cheap.
+
+**Example**: Your prompt, conversation history, RAG context, system instructions.
+
+### 2. Output Tokens (4-8× More Expensive)
+The model's response. Generated sequentially, one token at a time. This is where costs explode.
+
+**Why it's expensive**: Sequential generation is computationally intensive. The model can't parallelize output like it can input.
+
+### 3. Reasoning Tokens (NEW in 2026)
+Internal "thinking" tokens used by advanced models like GPT-5.2 and Claude 4 Opus. You pay for the model's internal reasoning process.
+
+**The catch**: You're paying for tokens you never see. A simple query might trigger thousands of reasoning tokens behind the scenes.
+
+## 2026 Pricing: The Real Numbers
+
+Here's what you're actually paying across major providers:
+
+**GPT-4o**:
+- Input: $2.50/M tokens
+- Output: $10/M tokens
+- **4× multiplier**
+
+**GPT-4o Mini**:
+- Input: $0.15/M tokens
+- Output: $0.60/M tokens
+- **4× multiplier**
+
+**GPT-5.2 Pro** (The Expensive One):
+- Input: $21/M tokens
+- Output: $168/M tokens
+- **8× multiplier**
+
+**Claude Sonnet 4**:
+- Input: $3/M tokens
+- Output: $15/M tokens
+- **5× multiplier**
+
+**Claude Opus 4**:
+- Input: $15/M tokens
+- Output: $75/M tokens
+- **5× multiplier**
+
+**DeepSeek V3.2** (Cost-Aggressive):
+- **1.6× output-to-input ratio**
+- Significantly cheaper than Western models
+
+**Llama 4 Maverick**:
+- **3× ratio**
+- Open-source advantage
+
+## Real-World Cost Examples
+
+Let's say you're running 1 million requests per month. Each request has:
+- 2,000 input tokens (prompt + context)
+- 400 output tokens (response)
+
+**Your monthly bill**:
+
+- **Qwen 3 4B**: $72
+- **LLaMA 3.1 8B**: $124
+- **GPT-4o**: $9,000
+- **Claude Opus 4**: $60,000
+- **GPT-5.2 Pro**: $109,200
+
+Same workload. 1,500× cost difference between cheapest and most expensive.
+
+**This is why token economics matters.**
+
+## The €60B Mistake: What Companies Get Wrong
+
+### Mistake #1: Using Premium Models for Everything
+
+Most companies default to GPT-4o or Claude Opus for every task.
+
+**Reality**: 70-80% of queries can be handled by cheaper models with zero quality loss.
+
+**Fix**: Intelligent routing. GPT-4o Mini for simple tasks, GPT-4o for complex reasoning.
+
+**Savings**: 60-90% cost reduction.
+
+### Mistake #2: Ignoring Output Token Costs
+
+Companies optimize prompts to reduce input tokens. Then they get a 5,000-token response.
+
+**Reality**: Output tokens cost 4-8× more. A verbose response destroys your budget.
+
+**Fix**: Output budgeting. Request "3 short bullets" or "under 100 tokens" in your prompts.
+
+**Savings**: 40-70% on output costs.
+
+### Mistake #3: Replaying Entire Conversation History
+
+Every turn in a conversation, you send the full history as input tokens.
+
+**Reality**: A 20-turn conversation sends the same messages 20 times. You're paying for redundancy.
+
+**Fix**: Summarize earlier turns. Keep only recent context.
+
+**Savings**: 50%+ on conversation-heavy applications.
+
+### Mistake #4: Inefficient RAG Systems
+
+Retrieval-Augmented Generation (RAG) systems often retrieve 10-20 chunks per query.
+
+**Reality**: Each chunk is 500-1,000 tokens. You're sending 10,000+ input tokens when you only need 2,000.
+
+**Fix**: Limit retrieval to 2-3 most relevant chunks. Use reranking.
+
+**Savings**: 50-80% on RAG input costs.
+
+### Mistake #5: Bloated System Prompts
+
+System prompts often grow to 800-1,500 tokens of instructions, examples, and formatting rules.
+
+**Reality**: You're paying for this on every single request.
+
+**Fix**: Reduce to concise directives (200-300 tokens). Move examples to few-shot learning only when needed.
+
+**Savings**: 30-50% on system prompt overhead.
+
+## 7 Proven Cost Reduction Strategies
+
+### 1. Intelligent Model Routing
+
+Route 70-80% of traffic to cheaper models. Escalate to premium models only when needed.
+
+**Implementation**:
+```python
+def route_request(query, complexity_score):
+    if complexity_score < 0.3:
+        return "gpt-4o-mini"  # $0.15/$0.60
+    elif complexity_score < 0.7:
+        return "gpt-4o"  # $2.50/$10
+    else:
+        return "claude-opus-4"  # $15/$75
+```
+
+**Result**: 60-90% cost reduction with maintained quality.
+
+### 2. Output Budgeting
+
+Explicitly limit output length in your prompts.
+
+**Before**: "Explain this concept."
+
+**After**: "Explain this concept in 3 short bullets, under 100 tokens."
+
+**Result**: 40-70% reduction in output token costs.
+
+### 3. Conversation History Management
+
+Don't replay entire conversation history. Summarize earlier turns.
+
+**Implementation**:
+- Keep last 3-5 turns verbatim
+- Summarize earlier turns into 100-200 tokens
+- Drop very old context
+
+**Result**: 50%+ savings on conversation apps.
+
+### 4. RAG Optimization
+
+Limit retrieval to 2-3 chunks. Use reranking for precision.
+
+**Implementation**:
+- Initial retrieval: Top 10 chunks
+- Rerank: Select top 2-3 most relevant
+- Send only reranked chunks to LLM
+
+**Result**: 50-80% reduction in RAG input costs.
+
+### 5. System Prompt Optimization
+
+Reduce bloated system prompts to concise directives.
+
+**Before** (800 tokens):
+```
+You are a helpful assistant. You should always be polite and professional.
+When answering questions, follow these guidelines:
+1. Be clear and concise
+2. Provide examples when helpful
+3. Use proper formatting
+[... 600 more tokens of instructions]
+```
+
+**After** (200 tokens):
+```
+Answer clearly and concisely. Use examples when helpful.
+```
+
+**Result**: 30-50% savings on system prompt overhead.
+
+### 6. Batch Processing
+
+For non-latency-sensitive tasks, use batch APIs.
+
+**Providers**:
+- OpenAI Batch API: 50% discount
+- Anthropic Batch: Similar savings
+
+**Use cases**: Data analysis, content generation, classification tasks
+
+**Result**: 50% cost reduction for batch workloads.
+
+### 7. Caching Static Content
+
+Reuse system prompts and boilerplate across requests.
+
+**Implementation**:
+- Cache system prompts
+- Cache common RAG chunks
+- Cache few-shot examples
+
+**Providers**: Anthropic offers prompt caching (90% discount on cached tokens)
+
+**Result**: 30-90% savings on repeated content.
+
+## Strategic Model Selection: The 60-90% Savings Playbook
+
+Here's the framework I use with Law Labs clients:
+
+### Tier 1: Simple Tasks (70% of queries)
+**Use**: GPT-4o Mini, Claude Haiku, Llama 4
+**Cost**: $0.15-$0.50/M input
+**Examples**: Classification, simple Q&A, formatting, extraction
+
+### Tier 2: Medium Complexity (20% of queries)
+**Use**: GPT-4o, Claude Sonnet 4
+**Cost**: $2.50-$3/M input
+**Examples**: Analysis, summarization, creative writing, code generation
+
+### Tier 3: Complex Reasoning (10% of queries)
+**Use**: GPT-5.2 Pro, Claude Opus 4
+**Cost**: $15-$21/M input
+**Examples**: Multi-step reasoning, complex problem-solving, advanced code
+
+**Result**: 60-90% cost reduction vs using premium models for everything.
+
+## The Bottom Line
+
+Token economics isn't just technical details. It's the difference between a €10K AI bill and a €100K AI bill.
+
+**What most companies do**:
+- Use premium models for everything
+- Ignore output token costs
+- Replay full conversation history
+- Send 10+ RAG chunks per query
+- Bloated system prompts
+
+**What optimized companies do**:
+- Intelligent model routing (60-90% savings)
+- Output budgeting (40-70% savings)
+- Conversation summarization (50%+ savings)
+- RAG optimization (50-80% savings)
+- Prompt optimization (30-50% savings)
+- Batch processing (50% savings)
+- Caching (30-90% savings)
+
+**Combined result**: 40-60% total cost reduction without quality loss.
+
+## Your Next Steps
+
+Spending €50K+/month on AI? Here's what to do:
+
+1. **Audit your token usage**: Where are your tokens going?
+2. **Identify quick wins**: Output budgeting and model routing are easiest
+3. **Implement systematically**: Start with highest-volume endpoints
+4. **Measure results**: Track cost per request before and after
+5. **Iterate**: Continuous optimization as usage patterns change
+
+Or skip the learning curve and get expert help.
+
+**Schedule a free token efficiency audit**. I'll show you exactly where you're overpaying and how much you can save.
+
+[Book Free Consultation →](https://cal.com/naoise-law/consultation)
+
+---
+
+**About Law Labs**: We help enterprises reduce AI/LLM costs by 40-60% through prompt engineering, model selection, and intelligent routing. Founded by Naoise Law, award-winning AI engineer and LSE MSc graduate.
