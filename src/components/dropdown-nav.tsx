@@ -4,10 +4,10 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { ModeToggle } from "@/components/mode-toggle";
 import { 
   HomeIcon, 
   UserIcon, 
-  PlayIcon, 
   FolderIcon, 
   WrenchScrewdriverIcon, 
   EnvelopeIcon,
@@ -160,8 +160,14 @@ export default function DropdownNav() {
             </div>
           </div>
 
+          {/* Mode Toggle (desktop) */}
+          <div className="hidden md:flex items-center ml-4">
+            <ModeToggle />
+          </div>
+
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            <ModeToggle />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
