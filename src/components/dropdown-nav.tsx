@@ -26,11 +26,6 @@ interface NavItem {
 const navigation: NavItem[] = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "About", href: "/#about", icon: UserIcon },
-  { 
-    name: "Interactive Experience", 
-    href: "/simulator", 
-    icon: PlayIcon 
-  },
   {
     name: "Projects",
     href: "/projects",
