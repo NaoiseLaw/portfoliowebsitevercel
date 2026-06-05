@@ -1,8 +1,7 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import BlurFade from "@/components/magicui/blur-fade";
-import Link from "next/link";
+import { ProjectCard } from "@/components/project-card";
 import { useMemo, useState } from "react";
 
 export function ProjectsGrid({ projects }: { projects: readonly any[] }) {
@@ -52,16 +51,16 @@ export function ProjectsGrid({ projects }: { projects: readonly any[] }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {filtered.map((p) => (
           <BlurFade key={p.slug}>
-            <Link href={p.href} className="block border rounded p-4 hover:shadow-md transition">
-              <div className="font-semibold mb-1">{p.title}</div>
-              <div className="text-xs text-muted-foreground mb-2">{p.dates}</div>
-              <div className="text-sm text-muted-foreground line-clamp-3 mb-3">{p.description}</div>
-              <div className="flex flex-wrap gap-1">
-                {(p.technologies || []).slice(0, 4).map((t: string) => (
-                  <Badge key={t}>{t}</Badge>
-                ))}
-              </div>
-            </Link>
+            <ProjectCard
+              href={p.href}
+              title={p.title}
+              description={p.description}
+              dates={p.dates}
+              tags={p.technologies ?? []}
+              image={p.image}
+              video={p.video}
+              links={p.links ?? []}
+            />
           </BlurFade>
         ))}
       </div>
