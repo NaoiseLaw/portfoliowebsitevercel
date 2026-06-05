@@ -77,18 +77,6 @@ export const DATA = {
         "Built hx's AI enablement programme and automation infrastructure from scratch — no predecessor, no handover, no existing systems. 11 live automations across Finance, People, Sales, InfoSec, Customer Success, and Legal saving 25+ hours/week. 3 multi-agent AI systems (18 agents) including a company-wide OKR platform used by 250+ people across 941 pages. Windsurf enablement: 17 people onboarded across 7 pods, 120+ AI skills authored, 15 personalised packages — one sales leader reported a 10-13× productivity improvement within 8 weeks. Founded and run the company's first structured AI adoption programme: 1:1 coaching, Claude workshops, weekly AI Round Table (16+ attendees). Delivered strategic AI briefing directly to the CIO. Stack: n8n · Zapier · Claude · Windsurf · Notion · Python · JavaScript · Microsoft Graph API · AWS Lambda",
     },
     {
-      company: "Law Labs",
-      href: "https://naoiselaw.com/consulting",
-      badges: [],
-      location: "London, UK / Remote",
-      title: "Founder",
-      logoUrl: "/lawlabs.png",
-      start: "March 2026",
-      end: "Present",
-      description:
-        "Side consultancy applying lessons from hx to help other teams adopt AI effectively — covering enablement, automation design, agent architecture, and knowledge systems. All service lines built on production-proven work.",
-    },
-    {
       company: "180° Consultancy LSE - UN Global Compact Lebanon",
       href: "#",
       badges: [],
