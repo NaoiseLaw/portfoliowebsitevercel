@@ -117,13 +117,13 @@ export default function Page() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
-                  My Projects
+                  Work
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                  AI & Automation Projects
+                  Selected Projects
                 </h2>
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  From AI research to process automation, here are some of my key projects demonstrating technical skills and business impact.
+                  A mix of production systems, research, and side projects.
                 </p>
               </div>
             </div>
@@ -156,13 +156,13 @@ export default function Page() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
-                  Hackathon
+                  Hackathons
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                  Innovation Challenge
+                  Hackathons
                 </h2>
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Participated in collaborative tech challenges to solve real-world problems.
+                  Competed across LSE and industry challenges.
                 </p>
               </div>
             </div>
