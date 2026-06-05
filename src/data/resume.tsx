@@ -1,5 +1,5 @@
 import { Icons } from "@/components/icons";
-import { HomeIcon, NotebookIcon, Gamepad2Icon } from "lucide-react";
+import { HomeIcon, NotebookIcon, Gamepad2Icon, BriefcaseIcon } from "lucide-react";
 
 export const DATA = {
   name: "Naoise Law",
@@ -8,34 +8,39 @@ export const DATA = {
   location: "London, UK / Dublin, Ireland",
   locationLink: "https://www.google.com/maps/place/london",
   description:
-    "Hackathon winner who builds and ships AI products. Combining finance background (managed $1.5B at SEIC) with hands-on technical execution. MSc in AI & Digital Innovation at LSE. Looking for Product Manager and Founders Associate roles where I can both strategize and build.",
+    "Automation Analyst at hyperexponential (hx) — building AI infrastructure, multi-agent systems, and enablement programmes that scale. LSE MSc graduate. Hackathon winner. Full-stack developer who ships.",
   summary:
-    "I build products that solve real problems. At LSE, I won the MISDI Hackathon as a solo developer, creating an ML platform that achieved 92% accuracy in content moderation. My team reached top 4 in Visa's Sprint Week with a disaster response system.\n\nBefore tech, I managed five private equity funds ($1.5B AUM) at SEIC, building analytics dashboards that automated reporting processes. My background spans finance, systems analysis, and operations—but what sets me apart is that I can both manage product strategy and write the code myself.\n\nCurrently seeking Product Manager and Founders Associate roles in London/Dublin.",
+    "I build AI systems that actually work — then help teams adopt them without wasting money or burning out.\n\nAt hyperexponential (hx), I built the entire AI enablement programme and automation infrastructure from nothing: 11 live automations saving 25+ hours/week, 3 multi-agent systems (18 agents), and a Windsurf onboarding programme that delivered a 10-13× productivity improvement for one sales leader within 8 weeks. I founded and run hx's first structured AI adoption programme — 1:1 coaching, Claude workshops, a weekly AI Round Table, and a strategic AI briefing delivered directly to the CIO.\n\nAt LSE, I won the MISDI Code Camp as a solo developer against 10+ teams — building a multi-model ensemble for content moderation with 94%+ accuracy. I reached Top 4 in Visa's Sprint Week with a disaster response platform.\n\nBefore tech, I managed five private equity funds ($1.5B AUM) at SEIC, built fraud-detection analytics at Bank of Ireland, and redesigned a Salesforce CRM serving 1,000+ users at EPIC.\n\nBackground: MSc MISDI (LSE) · Full-stack developer (Next.js, TypeScript, Python, Supabase) · Operator who builds, ships, and enables.",
   avatarUrl: "/Downloads/Naoise-headshot/Naoise.jpeg",
   skills: [
     "Python",
-    "AI/ML Tools",
-    "Salesforce CRM",
-    "Advanced Excel",
-    "SQL",
-    "Data Analytics",
-    "Google Analytics",
-    "Adobe Creative Suite",
+    "TypeScript",
+    "Next.js",
     "Process Automation",
-    "Workday",
-    "Microsoft Office Suite",
-    "Canva",
+    "AI/ML Engineering",
+    "Prompt Engineering",
+    "n8n / Zapier",
+    "SQL",
+    "LangChain",
+    "Supabase / PostgreSQL",
+    "FastAPI",
+    "Microsoft Graph API",
+    "Model Context Protocol (MCP)",
+    "Natural Language Processing",
+    "Node.js",
+    "Data Analytics",
   ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
     { href: "/blog", icon: NotebookIcon, label: "Blog" },
+    { href: "/consulting", icon: BriefcaseIcon, label: "Consulting" },
     { href: "/simulator", icon: Gamepad2Icon, label: "3D Simulator" },
   ],
   contact: {
-    email: "lawnaoise@gmail.com",
+    email: "naoiselaw123@gmail.com",
     tel: "+123456789",
     heading: "Let's Connect",
-    description: "Interested in AI, automation, or digital transformation? I'd love to discuss how technology can solve your business challenges. Currently seeking opportunities in product management, as a Founders Associate and tech consulting.",
+    description: "Automation Analyst at hx, building AI infrastructure and enablement programmes. Open to conversations about AI adoption, automation architecture, and product work.",
     social: {
       GitHub: {
         name: "GitHub",
@@ -51,7 +56,7 @@ export const DATA = {
       },
       email: {
         name: "Send Email",
-        url: "mailto:lawnaoise@gmail.com",
+        url: "mailto:naoiselaw123@gmail.com",
         icon: Icons.email,
         navbar: false,
       },
@@ -59,6 +64,30 @@ export const DATA = {
   },
 
   work: [
+    {
+      company: "hyperexponential (hx)",
+      href: "https://www.hyperexponential.com",
+      badges: [],
+      location: "London, UK",
+      title: "Automation Analyst",
+      logoUrl: "/hx.png",
+      start: "November 2025",
+      end: "Present",
+      description:
+        "Built hx's AI enablement programme and automation infrastructure from scratch — no predecessor, no handover, no existing systems. 11 live automations across Finance, People, Sales, InfoSec, Customer Success, and Legal saving 25+ hours/week. 3 multi-agent AI systems (18 agents) including a company-wide OKR platform used by 250+ people across 941 pages. Windsurf enablement: 17 people onboarded across 7 pods, 120+ AI skills authored, 15 personalised packages — one sales leader reported a 10-13× productivity improvement within 8 weeks. Founded and run the company's first structured AI adoption programme: 1:1 coaching, Claude workshops, weekly AI Round Table (16+ attendees). Delivered strategic AI briefing directly to the CIO. Stack: n8n · Zapier · Claude · Windsurf · Notion · Python · JavaScript · Microsoft Graph API · AWS Lambda",
+    },
+    {
+      company: "Law Labs",
+      href: "https://naoiselaw.com/consulting",
+      badges: [],
+      location: "London, UK / Remote",
+      title: "Founder",
+      logoUrl: "/lawlabs.png",
+      start: "March 2026",
+      end: "Present",
+      description:
+        "Side consultancy applying lessons from hx to help other teams adopt AI effectively — covering enablement, automation design, agent architecture, and knowledge systems. All service lines built on production-proven work.",
+    },
     {
       company: "180° Consultancy LSE - UN Global Compact Lebanon",
       href: "#",
@@ -81,7 +110,7 @@ export const DATA = {
       start: "January 2024",
       end: "July 2024",
       description:
-        "Managed five private equity funds totaling $1.5B AUM with 40+ investors and two external administrative teams, preparing quarterly NAVs and performance reports. Built predictive analytics dashboards using Excel/VBA that automated reporting processes, reducing manual analysis time by 60%. Utilized Jira for project tracking and risk management KPIs across 2 overseas account analysis teams, implementing 3 operational improvements in payment processing.",
+        "Managed five private equity funds totaling $1.5B AUM with 40+ investors and two external administrative teams, preparing quarterly NAVs and performance reports. Built predictive analytics dashboards using Excel/VBA that automated reporting processes, reducing manual analysis time by 60%. Utilised Jira for project tracking and risk management KPIs across 2 overseas account analysis teams, implementing 3 operational improvements in payment processing.",
     },
     {
       company: "Bank of Ireland",
@@ -136,7 +165,7 @@ export const DATA = {
     {
       school: "London School of Economics",
       href: "https://www.lse.ac.uk",
-      degree: "MSc Managing Information Systems and Digital Innovation",
+      degree: "MSc Managing Information Systems and Digital Innovation (MISDI) — Code Camp Overall Winner",
       logoUrl: "/lse.png",
       start: "2024",
       end: "2025",
@@ -289,7 +318,7 @@ export const DATA = {
       links: [],
       metrics: { efficiency: "25-50% performance gains", implementation: "90-day cycles", sectors: "Fintech + AI + Enterprise" },
       problem: "Organizations need rapid, focused transformation approaches to deliver meaningful improvements within compressed timeframes.",
-      solution: "Comprehensive 90-day improvement plans combining analytical rigor with practical implementation frameworks.",
+      solution: "Comprehensive 90-day improvement plans combining analytical rigour with practical implementation frameworks.",
       role: "Strategic Consultant & Plan Architect",
       artifacts: [],
     },
@@ -299,14 +328,14 @@ export const DATA = {
       href: "/projects/anaphor-analytics-website",
       dates: "2024",
       location: "Web Development",
-      description: "Professional analytics platform built on Squarespace achieving 98% mobile optimization score and 2.1s load time. Custom-designed responsive website serving 5K+ monthly visitors.",
-      technologies: ["Squarespace", "Custom CSS", "JavaScript", "Responsive Design", "SEO Optimization"],
+      description: "Professional analytics platform built on Squarespace achieving 98% mobile optimisation score and 2.1s load time. Custom-designed responsive website serving 5K+ monthly visitors.",
+      technologies: ["Squarespace", "Custom CSS", "JavaScript", "Responsive Design", "SEO Optimisation"],
       links: [
         { type: "website", label: "Live Site", url: "https://www.anaphoranalytics.com/" },
       ],
-      metrics: { mobile: "98% optimization", load_time: "2.1s", visitors: "5K+ monthly", conversion: "12%" },
+      metrics: { mobile: "98% optimisation", load_time: "2.1s", visitors: "5K+ monthly", conversion: "12%" },
       problem: "Need for professional online presence showcasing analytics capabilities with optimal performance and conversion.",
-      solution: "Custom-designed responsive website with advanced performance optimization and conversion-focused UX.",
+      solution: "Custom-designed responsive website with advanced performance optimisation and conversion-focused UX.",
       role: "Web Designer & Developer",
       artifacts: [],
     },
@@ -402,7 +431,7 @@ export const DATA = {
       links: [],
       metrics: { profit: "€7,000" },
       problem: "Custom apparel ordering.",
-      solution: "Online storefront with fulfillment.",
+      solution: "Online storefront with fulfilment.",
       role: "Owner",
       artifacts: [],
     },
@@ -462,7 +491,7 @@ export const DATA = {
       links: [],
       metrics: { market_size: "$1T+ global remittance market", languages: "25+ languages supported" },
       problem: "Complex international money transfer landscape with hidden fees and poor user experience.",
-      solution: "AI chatbot providing personalized recommendations and financial education for international transfers.",
+      solution: "AI chatbot providing personalised recommendations and financial education for international transfers.",
       role: "Product Designer & Business Strategy",
       artifacts: [],
     },
@@ -472,21 +501,21 @@ export const DATA = {
       href: "/projects/research-papers-collection",
       dates: "2024",
       location: "Academic Research",
-      description: "Academic research examining technology's impact on professional practice and organizational behavior in software engineering contexts.",
+      description: "Academic research examining technology's impact on professional practice and organisational behaviour in software engineering contexts.",
       technologies: ["Academic Research", "Qualitative Analysis", "Literature Review", "Theoretical Framework"],
       links: [],
       metrics: { publications: "3 research papers", focus: "Technology + professional practice" },
-      problem: "Limited understanding of technology's impact on professional practice and organizational behavior.",
-      solution: "Comprehensive research examining software engineering professional identity and organizational change.",
+      problem: "Limited understanding of technology's impact on professional practice and organisational behaviour.",
+      solution: "Comprehensive research examining software engineering professional identity and organisational change.",
       role: "Principal Researcher & Author",
       artifacts: [],
     },
   ],
   whatSetsMeApart: [
-    "I actually code - won hackathon solo, beating larger teams",
-    "Business fluent - managed $1.5B, understand ROI and metrics", 
-    "Fast execution - shipped 4 AI products in 12 months",
-    "Customer-focused - built solutions at EPIC (1,000+ users), DFF (8,000+ guests)"
+    "Built hx's entire AI programme from scratch — 11 automations, 3 multi-agent systems, 25+ hrs/week saved",
+    "Award-winning developer — LSE Code Camp solo winner against 10+ teams",
+    "Business fluent — managed $1.5B in PE funds, understand ROI and stakeholder management",
+    "Founder mindset — built and shipped Law Labs consulting alongside a full-time senior role",
   ],
   hackathons: [
     {
@@ -504,7 +533,7 @@ export const DATA = {
       dates: "January 2025",
       location: "London, UK",
       description:
-        "Reached top 4 of 20+ teams. Created VISAID disaster response platform for Visa and Roland Berger in 5-day sprint. Conducted customer discovery with humanitarian organizations, designed technical architecture, and pitched to VCs and executives.",
+        "Reached top 4 of 20+ teams. Created VISAID disaster response platform for Visa and Roland Berger in 5-day sprint. Conducted customer discovery with humanitarian organisations, designed technical architecture, and pitched to VCs and executives.",
       image: "/visa-hackathon.png",
       win: "Top 4 Finalist",
       links: [],
