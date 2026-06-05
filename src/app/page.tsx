@@ -128,38 +128,20 @@ export default function Page() {
               </div>
             </div>
           </BlurFade>
-          {/* Featured */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[900px] mx-auto">
             {DATA.projects.filter((p) => (p as any).featured).slice(0, 4).map((project, id) => (
               <BlurFade
                 key={project.title}
                 delay={BLUR_FADE_DELAY * 12 + id * 0.05}
               >
-                <Link href={project.href} className="block border rounded p-4 hover:shadow-md transition">
-                  <div className="text-sm text-muted-foreground">{project.dates}</div>
-                  <div className="text-lg font-semibold">{project.title}</div>
-                  <div className="text-sm text-muted-foreground line-clamp-3">{project.description}</div>
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {(project.technologies || []).slice(0, 4).map((t) => (
-                      <Badge key={t}>{t}</Badge>
-                    ))}
-                  </div>
-                </Link>
-              </BlurFade>
-            ))}
-          </div>
-          {/* More */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto">
-            {DATA.projects.filter((p) => !(p as any).featured).map((project, id) => (
-              <BlurFade
-                key={project.title}
-                delay={BLUR_FADE_DELAY * 12 + id * 0.03}
-              >
-                <Link href={project.href} className="block border rounded p-4 hover:shadow-sm transition">
-                  <div className="text-xs text-muted-foreground">{project.dates}</div>
-                  <div className="font-medium">{project.title}</div>
-                  <div className="text-sm text-muted-foreground line-clamp-2">{project.description}</div>
-                </Link>
+                <ProjectCard
+                  href={project.href}
+                  title={project.title}
+                  description={project.description}
+                  dates={project.dates}
+                  tags={(project as any).technologies ?? []}
+                  links={[]}
+                />
               </BlurFade>
             ))}
           </div>
