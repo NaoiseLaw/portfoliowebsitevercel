@@ -9,7 +9,6 @@ import {
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import Markdown from "react-markdown";
 
 interface Props {
   title: string;
@@ -77,9 +76,9 @@ export function ProjectCard({
           <div className="hidden font-sans text-xs underline print:visible">
             {link?.replace("https://", "").replace("www.", "").replace("/", "")}
           </div>
-          <Markdown className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
+          <p className="max-w-full text-pretty font-sans text-xs text-muted-foreground">
             {description}
-          </Markdown>
+          </p>
         </div>
       </CardHeader>
       <CardContent className="mt-auto flex flex-col px-2">
