@@ -1,12 +1,5 @@
 import { DATA } from "@/data/resume";
-import dynamicImport from "next/dynamic";
-
-export const dynamic = "force-dynamic";
-
-const ProjectsGrid = dynamicImport(
-  () => import("@/components/projects-grid").then((m) => ({ default: m.ProjectsGrid })),
-  { ssr: false, loading: () => <p className="text-muted-foreground text-sm">Loading projects…</p> }
-);
+import { ProjectsGrid } from "@/components/projects-grid";
 
 export const metadata = {
   title: "Projects",

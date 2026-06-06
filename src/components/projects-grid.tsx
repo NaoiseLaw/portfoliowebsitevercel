@@ -59,7 +59,11 @@ export function ProjectsGrid({ projects }: { projects: readonly any[] }) {
               tags={p.technologies ?? []}
               image={p.image}
               video={p.video}
-              links={p.links ?? []}
+              links={(p.links ?? []).map((l: any) => ({
+                type: l.type || l.label || "Link",
+                href: l.url || l.href || "#",
+                icon: l.icon ?? null,
+              }))}
             />
           </BlurFade>
         ))}
