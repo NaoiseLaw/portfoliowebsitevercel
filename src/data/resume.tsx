@@ -551,10 +551,10 @@ export const DATA = {
     },
   ],
   whatSetsMeApart: [
-    "Built hx's entire AI programme from scratch — 11 automations, 3 multi-agent systems, 25+ hrs/week saved",
-    "Award-winning developer — LSE Code Camp solo winner against 10+ teams",
-    "Business fluent — managed $1.5B in PE funds, understand ROI and stakeholder management",
-    "Founder mindset — built and shipped Law Labs consulting alongside a full-time senior role",
+    "I actually code - won hackathon solo, beating larger teams",
+    "Business fluent - managed $1.5B, understand ROI and metrics",
+    "Fast execution - shipped 4 AI products in 12 months",
+    "Customer-focused - built solutions at EPIC (1,000+ users), DFF (8,000+ guests)",
   ],
   hackathons: [
     {

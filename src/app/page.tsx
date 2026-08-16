@@ -199,7 +199,10 @@ export default function Page() {
                 Let&apos;s Connect
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                {DATA.contact.description}
+                Building AI systems that actually work — then helping teams use them well. Interested in AI, automation, or practical AI consulting?{" "}
+                <a href="/consulting" className="underline">
+                  See how I can help →
+                </a>
               </p>
             </div>
           </BlurFade>

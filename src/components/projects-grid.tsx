@@ -80,5 +80,3 @@ function categoriesOf(p: any): string[] {
   if ((p.location || "").toLowerCase().includes("client") || (p.description || "").toLowerCase().includes("e-commerce")) cats.push("Business");
   return cats.length ? cats : ["All"];
 }
-
-

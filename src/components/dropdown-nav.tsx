@@ -13,7 +13,8 @@ import {
   EnvelopeIcon,
   ChevronDownIcon,
   Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  PlayIcon
 } from "@heroicons/react/24/outline";
 
 interface NavItem {
@@ -26,6 +27,11 @@ interface NavItem {
 const navigation: NavItem[] = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "About", href: "/#about", icon: UserIcon },
+  { 
+    name: "Interactive Experience", 
+    href: "/simulator", 
+    icon: PlayIcon 
+  },
   {
     name: "Projects",
     href: "/projects",
